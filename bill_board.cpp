@@ -23,7 +23,6 @@ typedef struct {
 	XMFLOAT2 texcoord;
 }BillBoardVertex;
 
-static XMMATRIX mtxInvV;
 
 BillBoard::BillBoard() {
 
@@ -76,20 +75,7 @@ void BillBoard::Draw() {
 	// 頂点バッファ設定
 	CRenderer::SetVertexBuffers(m_VertexBuffer);
 
-	XMMATRIX translation;
-	XMMATRIX scale;
-	translation = XMMatrixTranslation(m_Transform.Position.x,m_Transform.Position.y,m_Transform.Position.z);
-	scale = XMMatrixScaling(m_Transform.Scale.x, m_Transform.Scale.y, m_Transform.Scale.z);
-	Scene* scene = CManager::GetScene();
-	scene->GetComponent<CCamera>(0);
-	CCamera* camera = scene->GetComponent<CCamera>(0);
-	mtxInvV = XMMatrixTranspose(camera->GetViewMatrix());
-	mtxInvV.r[0].m128_f32[3] = 0.0f;
-	mtxInvV.r[1].m128_f32[3] = 0.0f;
-	mtxInvV.r[2].m128_f32[3] = 0.0f;
-	XMMATRIX world = scale * mtxInvV * translation;
-
-	CRenderer::SetWorldMatrix(&world);
+	m_Transform.SetBillBoardWorldMatrix();
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->Draw(4, 0);//ポリゴン描画
 
