@@ -95,7 +95,7 @@ void MeshField::Init(float width, float height, int Max, int sideMax, int length
 
 		CRenderer::GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer);
 	}
-
+	m_Transform.Scale = { 10.0f,1.0f,10.0f };
 }
 
 void MeshField::UnInit() {
@@ -112,12 +112,7 @@ void MeshField::Draw() {
 	CRenderer::SetVertexBuffers(m_VertexBuffer);
 	// インデックスバッファ設定
 	CRenderer::SetIndexBuffer(m_IndexBuffer);
-	// マトリクス設定
-	XMMATRIX world;
-	world = XMMatrixScaling(1.0,1.0,1.0);
-	world *= XMMatrixTranslation(0.0f, 0.0f, 0.0f);
-	CRenderer::SetWorldMatrix(&world);
-
+	m_Transform.SetWorldMatrix();
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->DrawIndexed(indexNum, 0, 0);
 

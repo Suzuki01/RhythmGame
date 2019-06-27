@@ -64,7 +64,7 @@ public:
 		AddGameObject<Player>(2)->Init();
 		AddGameObject<Enemy>(3)->Init();
 		AddGameObject<Field>(4)->Init();//->SetPosition();のようなものでサイズや描画位置を指定
-		//AddGameObject<BillBoard>(6)->Init();
+		AddGameObject<BillBoard>(6)->Init();
 		AddGameObject<CPolygon>(7)->Init();
 	}
 

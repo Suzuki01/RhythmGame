@@ -57,12 +57,7 @@ void Player::Update() {
 
 void Player::Draw() {
 	// マトリクス設定
-	XMMATRIX world;
-	world = XMMatrixScaling(m_Transform.Scale.x, m_Transform.Scale.y, m_Transform.Scale.z);
-	world *= XMMatrixRotationRollPitchYaw(m_Transform.Rotation.x, m_Transform.Rotation.y, m_Transform.Rotation.z);
-	world *= XMMatrixTranslation(m_Transform.Position.x, m_Transform.Position.y, m_Transform.Position.z);
-	CRenderer::SetWorldMatrix(&world);
-
+	m_Transform.SetWorldMatrix();
 	m_Model->Draw();
 }
 

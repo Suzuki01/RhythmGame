@@ -41,6 +41,7 @@ void Field::Init() {
 	m_Texture = new CTexture();
 //	m_Texture->Load("asset/field004.tga");
 	m_Texture->LoadAllTexture("asset/jo.png");
+	m_Transform.Scale = { 10.0f, 10.0f, 10.0f };
 }
 
 void Field::Uninit() {
@@ -54,11 +55,7 @@ void Field::Draw() {
 	UINT offset = 0;
 	CRenderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset); //頂点バッファ設定　一度に複数の頂点を設定できる
 	CRenderer::SetTexture(m_Texture);    //テクスチャ設定
-	XMMATRIX world;
-	world = XMMatrixScaling(10.0f, 10.0f, 10.0f);
-	world *= XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f);
-	world *= XMMatrixTranslation(0.0f,0.0f,0.0f);
-	CRenderer::SetWorldMatrix(&world);
+	m_Transform.SetWorldMatrix();
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->Draw(4, 0);//ポリゴン描画
 }
