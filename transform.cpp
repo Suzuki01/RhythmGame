@@ -9,6 +9,7 @@
 #include "mesh_field.h"
 #include "polygon.h"
 #include "scene.h"
+#include "quaternion.h"
 #include "transform.h"
 
 
@@ -28,7 +29,15 @@ void Transform::SetWorldMatrix() {
 	XMMATRIX world;
 	world = XMMatrixScaling(Scale.x, Scale.y, Scale.z);
 	world *= XMMatrixRotationRollPitchYaw(Rotation.x, Rotation.y,Rotation.z);
-	world *= XMMatrixTranslation(Position.x, Position.x, Position.x);
+	world *= XMMatrixTranslation(Position.x, Position.y, Position.z);
+	CRenderer::SetWorldMatrix(&world);
+}
+
+void Transform::SetWorldQuaternionMatrix(){
+	XMMATRIX world;
+	world = XMMatrixScaling(Scale.x, Scale.y, Scale.z);
+	world *= Quaternion.QuaternionToRotationMatrix();
+	world *= XMMatrixTranslation(Position.x, Position.y, Position.z);
 	CRenderer::SetWorldMatrix(&world);
 }
 

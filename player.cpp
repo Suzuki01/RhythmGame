@@ -9,9 +9,6 @@
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
-#include "field.h"
-#include "mesh_field.h"
-#include "polygon.h"
 #include "scene.h"
 
 
@@ -53,11 +50,14 @@ void Player::Update() {
 		Enemy* enemy = scene->AddGameObject<Enemy>(3);
 		enemy->SetPosition(m_Transform.Position);
 	}
+	m_Transform.Rotation.y += 0.1;
 }
 
 void Player::Draw() {
 	// マトリクス設定
-	m_Transform.SetWorldMatrix();
+	//m_Transform.SetWorldMatrix();
+	m_Transform.Quaternion.EulerToQuaternion(m_Transform.Rotation.x, m_Transform.Rotation.y, m_Transform.Rotation.z);
+	m_Transform.SetWorldQuaternionMatrix();
 	m_Model->Draw();
 }
 
