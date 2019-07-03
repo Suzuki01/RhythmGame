@@ -10,7 +10,7 @@ bool move;
 void CCamera::Init()
 {
 
-	m_Transform.Position = XMFLOAT3( 0.0f, 5.0f, -15.0f );
+	m_Transform.Position = XMFLOAT3( 0.0f, 12.0f, -15.0f );
 	m_Transform.Rotation = XMFLOAT3( 0.5f, 0.0f, 0.0f );
 	m_Viewport.left = 0;
 	m_Viewport.top = 0;

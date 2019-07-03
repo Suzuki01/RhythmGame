@@ -22,6 +22,13 @@ int gridMax;
 static int vertexNum;//頂点数
 static int indexNum; //インデックス数
 CTexture* Texture;
+float g_FieldHeight[5][5] = {
+	{1.0f,2.0f,0.0f,-1.0f,0.0f},
+	{3.0f,0.0f,2.0f,-2.0f,-1.0f},
+	{5.0f,0.0f,2.0f,1.0f,0.0f},
+	{-5.0f,-3.0f,-4.0f,-2.0f,-1.0f},
+	{0.0f,2.0f,1.0f,-1.0f,1.0f},
+};
 
 void MeshField::Init(float width, float height, int Max, int sideMax, int lengthMax) {
 	gridMax = Max;
@@ -38,7 +45,7 @@ void MeshField::Init(float width, float height, int Max, int sideMax, int length
 		float startZ = (height * lengthMax / 2);
 		posX = 0;
 		for (int j = 0; j < sideMax + 1; j++) {
-			pMeshFieldVertex[num].position = XMFLOAT3( startX + (j * width),0.1f,startZ - (i * height) );
+			pMeshFieldVertex[num].position = XMFLOAT3( startX + (j * width),g_FieldHeight[i][j],startZ - (i * height) );
 			pMeshFieldVertex[num].normal =   XMFLOAT3( 0,1.0f,0 );
 			pMeshFieldVertex[num].color = XMFLOAT4(1.0f,1.0f,1.0f,1.0f);
 			pMeshFieldVertex[num].texcoord = XMFLOAT2(j, i);

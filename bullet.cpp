@@ -13,7 +13,7 @@ typedef struct {
 
 Bullet::Bullet() {
 	m_Transform.Position = XMFLOAT3(0, 1.0f, 0);
-	m_Transform.Scale = XMFLOAT3(2.0f, 4.0f, 2.0f);
+	m_Transform.Scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 	m_Transform.Rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_BillBoard = new BillBoard();
 	m_BillBoard->Init();
