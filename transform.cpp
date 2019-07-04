@@ -33,11 +33,29 @@ void Transform::SetWorldMatrix() {
 	CRenderer::SetWorldMatrix(&world);
 }
 
+//クォータニオンの回転を使ったワールド行列変換
 void Transform::SetWorldQuaternionMatrix(){
 	XMMATRIX world;
 	world = XMMatrixScaling(Scale.x, Scale.y, Scale.z);
 	world *= Quaternion.QuaternionToRotationMatrix();
 	world *= XMMatrixTranslation(Position.x, Position.y, Position.z);
+	CRenderer::SetWorldMatrix(&world);
+}
+
+//線形補完を使ったワールド行列変換
+void Transform::SetWorldLerpMatrix(XMFLOAT3 start,XMFLOAT3 goal,float t) {
+	XMMATRIX world;
+	world = XMMatrixScaling(Scale.x, Scale.y, Scale.z);
+	world *= XMMatrixRotationRollPitchYaw(Rotation.x, Rotation.y, Rotation.z);
+	world *= Quaternion.QuaternionLerp(start, goal, t);
+	CRenderer::SetWorldMatrix(&world);
+}
+
+void Transform::SetWorldSlerpMatrix(XMFLOAT4 startQ, XMFLOAT4 goalQ, float t) {
+	XMMATRIX world;
+	world = XMMatrixScaling(Scale.x, Scale.y, Scale.z);
+//	world *= XMMatrixRotationRollPitchYaw(Rotation.x, Rotation.y, Rotation.z);
+	world *= Quaternion.QuaternionSlerp(startQ, goalQ, t);
 	CRenderer::SetWorldMatrix(&world);
 }
 
@@ -58,3 +76,5 @@ void Transform::SetBillBoardWorldMatrix() {
 	XMMATRIX world = scale * mtxInvV * translation;
 	CRenderer::SetWorldMatrix(&world);
 }
+
+

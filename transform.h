@@ -15,6 +15,8 @@ public:
 	void SetWorldMatrix();
 	void SetWorldQuaternionMatrix();
 	void SetBillBoardWorldMatrix();
+	void SetWorldLerpMatrix(XMFLOAT3 start, XMFLOAT3 goal, float t);
+	void SetWorldSlerpMatrix(XMFLOAT4 startQ, XMFLOAT4 goalQ, float t);
 };
 
 #endif // !TRANSFORM_H_

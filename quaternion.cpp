@@ -90,3 +90,18 @@ XMMATRIX Quaternion::QuaternionToRotationMatrix() {
 	};*/
 	return RotationMatrix;
 }
+
+XMMATRIX Quaternion::QuaternionRotationAxis(float angle) {
+	XMMATRIX RotationMatrix = XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMLoadFloat4(&q),angle));
+	return RotationMatrix;
+}
+
+XMMATRIX Quaternion::QuaternionLerp(XMFLOAT3 start, XMFLOAT3 goal, float t) {
+	XMMATRIX TranslationMatrix = XMMatrixTranslationFromVector(XMVectorLerp(XMLoadFloat3(&start), XMLoadFloat3(&goal), t));
+	return TranslationMatrix;
+}
+
+XMMATRIX Quaternion::QuaternionSlerp(XMFLOAT4 startQ, XMFLOAT4 goalQ, float t) {
+	XMMATRIX TranslationMatrix = XMMatrixRotationQuaternion(XMQuaternionSlerp(XMLoadFloat4(&startQ), XMLoadFloat4(&goalQ), t));
+	return TranslationMatrix;
+}
