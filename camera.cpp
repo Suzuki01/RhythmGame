@@ -16,7 +16,6 @@ void CCamera::Init()
 	m_Viewport.top = 0;
 	m_Viewport.right = SCREEN_WIDTH;
 	m_Viewport.bottom = SCREEN_HEIGHT;
-	move = false;
 }
 
 

@@ -268,7 +268,7 @@ void CRenderer::Init()
 
 	// ÉâÉCÉgèâä˙âª
 	LIGHT light;
-	light.Direction = XMFLOAT4(0.0f, -1.0f, 0.0f, 0.0f);
+	light.Direction = XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f);
 	light.Diffuse = COLOR(0.9f, 0.9f, 0.9f, 1.0f);
 	light.Ambient = COLOR(0.1f, 0.1f, 0.1f, 1.0f);
 	SetLight(light);

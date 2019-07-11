@@ -24,10 +24,9 @@ class CTexture
 {
 
 public:
-	static CTexture* GetTexture(int index);
-	void Load( const char *FileName );
+//	CTexture* Load(std::string FileName );
 	void Unload();
-	ID3D11Texture2D* LoadAllTexture(const char* FileName);
+	ID3D11Texture2D* LoadTexture(std::string FileName);
 	static void TextureLoad();
 	ID3D11ShaderResourceView* GetShaderResourceView(){ return m_ShaderResourceView; }
 

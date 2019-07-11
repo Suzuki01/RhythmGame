@@ -41,7 +41,7 @@ void Wall::Init() {
 
 	//テクスチャ読み込み
 	m_Texture = new CTexture();
-	m_Texture->Load("asset/field004.tga");
+	m_Texture->LoadTexture("asset/field004.tga");
 }
 
 void Wall::Uninit() {

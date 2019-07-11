@@ -60,11 +60,11 @@ public:
 	
 	virtual void Init() {
 		AddGameObject<CCamera>(0)->Init();
-		AddGameObject<MeshField>(1)->Init(2,2,25,5,5);
+		AddGameObject<MeshField>(1)->Init(10,10,25,5,5);
 		AddGameObject<Player>(2)->Init();
-		AddGameObject<Enemy>(3)->Init();
-		AddGameObject<Field>(4)->Init();//->SetPosition();のようなものでサイズや描画位置を指定
-		AddGameObject<BillBoard>(6)->Init();
+	//	AddGameObject<Enemy>(3)->Init();
+	//	AddGameObject<Field>(4)->Init();//->SetPosition();のようなものでサイズや描画位置を指定
+	//	AddGameObject<BillBoard>(6)->Init();
 		AddGameObject<CPolygon>(7)->Init();
 	}
 
