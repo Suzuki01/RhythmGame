@@ -40,7 +40,7 @@ void Field::Init() {
 	//テクスチャ読み込み
 	m_Texture = new CTexture();
 //	m_Texture->Load("asset/field004.tga");
-	m_Texture->LoadAllTexture("asset/jo.png");
+	m_Texture->LoadTexture("asset/jo.png");
 	m_Transform.Scale = { 10.0f, 10.0f, 10.0f };
 }
 

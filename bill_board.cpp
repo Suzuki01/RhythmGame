@@ -63,7 +63,7 @@ void BillBoard::Init() {
 	//テクスチャ読み込み
 	m_Texture = new CTexture();
 	//	m_Texture->Load("asset/field004.tga");
-	m_Texture->LoadAllTexture("asset/jo.png");
+	m_Texture->LoadTexture("asset/jo.png");
 }
 
 void BillBoard::UnInit() {
