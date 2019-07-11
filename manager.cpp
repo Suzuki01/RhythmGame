@@ -12,6 +12,7 @@
 #include "enemy.h"
 #include "input.h"
 #include "imgui_setup.h"
+#include "sound.h"
 #include "scene.h"
 
 Scene* g_Scene;
@@ -26,6 +27,8 @@ void CManager::Init()
 	g_Scene->Init();
 
 	ImguiSetup::Init();
+	//g_Sound = new Sound;
+	Sound::Init("asset/sound/FIRE-GROUND.wav", 114);
 }
 
 void CManager::Uninit()
@@ -35,13 +38,21 @@ void CManager::Uninit()
 	//Input::UnInit(); ‚Ü‚¾ì‚Á‚Ä‚¢‚È‚¢
 	CRenderer::Uninit();
 	ImguiSetup::UnInit();
+	Sound::UnInit();
 }
 
 void CManager::Update()
 {
 	Input::Update();
+	Sound::Update();
 	ImguiSetup::Update();
 	g_Scene->Update();
+	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
+		Sound::Start();
+	}
+	if (Input::Keyboard_IsTrigger(VK_SPACE)) {
+		Sound::Reset();
+	}
 }
 
 void CManager::Draw()

@@ -177,6 +177,7 @@
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="quaternion.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="transform.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="quaternion.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="TextureLoader.h" />
