@@ -1,3 +1,4 @@
+#include <list>
 #include "main.h"
 #include "notes.h"
 
@@ -27,7 +28,32 @@ void Notes::Load(char* fileName) {
 		for (int i = 0; i < strvec.size(); i += strvec.size()) {
 			m_Notes[maxNotes].time = stof(strvec.at(i));
 			m_Notes[maxNotes].rane = stoi(strvec.at(i + 1));
+			m_Notes[maxNotes].isCreate = false;
 			maxNotes++;
 		}
 	}
+}
+
+void Notes::Draw() {
+}
+
+void Notes::Update() {
+}
+
+int Notes::GetMaxNotes()
+{
+	return maxNotes;
+}
+
+float Notes::GetNotesTime(int index) {
+	return m_Notes[index].time;
+}
+
+bool Notes::IsCreateNotes(int index)
+{
+	return m_Notes[index].isCreate;
+}
+
+void Notes::Create(int index) {
+	m_Notes[index].isCreate = true;
 }

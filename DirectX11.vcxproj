@@ -176,6 +176,7 @@
     <ClCompile Include="mesh_field.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="notes.cpp" />
+    <ClCompile Include="notes_object.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="quaternion.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="mesh_field.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="notes.h" />
+    <ClInclude Include="notes_object.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="quaternion.h" />

@@ -19,7 +19,7 @@ void CTexture::Unload()
 	m_ShaderResourceView->Release();
 }
 
-bool CTexture::LoadTexture(std::string FileName) {
+bool CTexture::LoadTexture(const char* FileName) {
 
 	unsigned char* pixels;
 	unsigned int texture;
@@ -28,7 +28,7 @@ bool CTexture::LoadTexture(std::string FileName) {
 	int bpp;
 	// ファイルを読み込み、画像データを取り出す
 	//   最後の引数でピクセルあたりのバイト数を強制できる
-	pixels = stbi_load(FileName.c_str(), &width, &height, &bpp, STBI_default);
+	pixels = stbi_load(FileName, &width, &height, &bpp, STBI_default);
 	D3D11_TEXTURE2D_DESC desc;
 	desc.Width = width;
 	desc.Height = height;

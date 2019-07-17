@@ -66,7 +66,7 @@ public:
 	void UnInit();
 	void Update();
 	void Draw();
-
+	XMFLOAT3 Position;
 	void Load( const char *FileName );
 	void Unload();
 	bool Load(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string filename);

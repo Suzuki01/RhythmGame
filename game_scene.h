@@ -2,7 +2,10 @@
 #define GAME_SCENE_H_
 
 class GameScene : public Scene {
+private:
+	char* m_pFileName;
 public:
+//	GameScene(char* fileName) : m_pFileName(fileName) {};
 	void Init();
 	void UnInit();
 	void Update();
@@ -15,6 +18,7 @@ enum {
 	CameraLayer,
 	FieldLayer,
 	PlayerLayer,
+	BillboardLayer,
 };
 
 #endif // !GAME_SCENE_H_

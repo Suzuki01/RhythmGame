@@ -8,6 +8,7 @@ private:
 public:
 	void Init();
 	void Draw();
+	void Update();
 	void UnInit();
 	BillBoard();
 	virtual ~BillBoard();

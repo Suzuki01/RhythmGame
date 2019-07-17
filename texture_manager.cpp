@@ -12,7 +12,7 @@ CTexture* TextureManager::Load(std::string FileName)
 	}
 	else {
 		CTexture* tex = new CTexture;
-		if (tex->LoadTexture(FileName)) {
+		if (tex->LoadTexture(FileName.c_str())) {
 			m_TextureIdMap[FileName] = tex;
 			return m_TextureIdMap[FileName];
 		}

@@ -3,18 +3,17 @@
 #include "game_object.h"
 #include "manager.h"
 #include "input.h"
+#include "polygon.h"
 #include "scene.h"
 #include "game_scene.h"
-#include "polygon.h"
 #include "audio_clip.h"
 #include "sound_manager.h"
 #include "title_scene.h"
 
 void TitleScene::Init()
 {
-	AddGameObject<CPolygon>(0)->Init();
-	m_SE = new CAudioClip;
-
+	AddGameObject<CPolygon>(0)->Init("asset/background.png",0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
+	//m_SE = new CAudioClip;
 }
 
 void TitleScene::UnInit()
@@ -24,7 +23,6 @@ void TitleScene::UnInit()
 
 void TitleScene::Update()
 {
-
 	Scene::Update();
 
 	if (Input::Keyboard_IsTrigger(VK_RETURN)) {

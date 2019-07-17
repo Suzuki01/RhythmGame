@@ -8,6 +8,7 @@ public:
 	void Update();
 private:
 	CAudioClip* m_SE;
+
 };
 
 #endif // !TITLE_SCENE_H_
