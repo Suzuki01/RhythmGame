@@ -4,20 +4,13 @@
 #include "texture.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include <string>
 #include <unordered_map>
+#include <map>
 
-std::unordered_map<std::string, CTexture>g_TextureIdMap;
 
-/*CTexture* CTexture::Load(std::string FileName)
-{
-	if (g_TextureIdMap.count(FileName) != 0) {
-		return &g_TextureIdMap[FileName];
-	}
-	else {
-		LoadTexture(FileName);
-	}
-}*/
+CTexture::~CTexture() {
+	Unload();
+}
 
 
 void CTexture::Unload()
@@ -26,7 +19,7 @@ void CTexture::Unload()
 	m_ShaderResourceView->Release();
 }
 
-ID3D11Texture2D* CTexture::LoadTexture(std::string FileName) {
+bool CTexture::LoadTexture(std::string FileName) {
 
 	unsigned char* pixels;
 	unsigned int texture;
@@ -56,7 +49,7 @@ ID3D11Texture2D* CTexture::LoadTexture(std::string FileName) {
 
 	auto hr = CRenderer::GetDevice()->CreateTexture2D(&desc, &initData, &m_Texture);
 	if (FAILED(hr)) {
-		assert(false);
+		return false;
 	}
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
@@ -67,8 +60,7 @@ ID3D11Texture2D* CTexture::LoadTexture(std::string FileName) {
 	hr = CRenderer::GetDevice()->CreateShaderResourceView(m_Texture, &SRVDesc, &m_ShaderResourceView);
 	if (FAILED(hr))
 	{
-		assert(false);
+		return false;
 	}
-	g_TextureIdMap[FileName].m_ShaderResourceView = m_ShaderResourceView;
-	return m_Texture;
+	return true;
 }

@@ -15,6 +15,7 @@
 #include "polygon.h"
 #include "scene.h"
 #include "bill_board.h"
+#include "texture_manager.h"
 
 typedef struct {
 	XMFLOAT3 position;//VECTOR4は座標変換済み頂点rhw = 1.0が2dの時に入っていた
@@ -62,8 +63,7 @@ void BillBoard::Init() {
 	}
 	//テクスチャ読み込み
 	m_Texture = new CTexture();
-	//	m_Texture->Load("asset/field004.tga");
-	m_Texture->LoadTexture("asset/jo.png");
+	m_Texture = TextureManager::Load("asset/jo.png");
 }
 
 void BillBoard::UnInit() {

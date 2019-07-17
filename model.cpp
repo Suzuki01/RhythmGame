@@ -1,6 +1,7 @@
 #include "main.h"
 #include "renderer.h"
 #include "texture.h"
+#include "texture_manager.h"
 #include "input.h"
 #include "model.h"
 
@@ -153,8 +154,7 @@ void CModel::Load( const char *FileName )
 			m_SubsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
 
 			m_SubsetArray[i].Material.Texture = new CTexture();
-			m_SubsetArray[i].Material.Texture->LoadTexture( model.SubsetArray[i].Material.TextureName );
-
+			m_SubsetArray[i].Material.Texture = TextureManager::Load(model.SubsetArray[i].Material.TextureName);
 		}
 	}
 
@@ -169,16 +169,7 @@ void CModel::Unload()
 {
 	m_VertexBuffer->Release();
 	m_IndexBuffer->Release();
-
-	for (unsigned short i = 0; i < m_SubsetNum; i++)
-	{
-		m_SubsetArray[i].Material.Texture->Unload();
-		delete m_SubsetArray[i].Material.Texture;
-	}
-
-
 	delete[] m_SubsetArray;
-
 }
 
 

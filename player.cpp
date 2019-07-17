@@ -53,9 +53,8 @@ void Player::Update() {
 		Enemy* enemy = scene->AddGameObject<Enemy>(3);
 		enemy->SetPosition(m_Transform.Position);
 	}
-	//m_Transform.Rotation.y += 0.1;
 	MeshField* field = CManager::GetScene()->GetComponent<MeshField>(1);
-	m_Transform.Position.y = field->GetHeight(m_Transform.Position);
+	m_Transform.Position.y = field->GetHeight(m_Transform.Position) + 1.0f;
 	
 }
 float t = 0;
