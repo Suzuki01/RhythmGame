@@ -4,41 +4,47 @@
 #include "renderer.h"
 #include "scene.h"
 #include "game_object.h"
-#include "mesh_field.h"
-#include "field.h"
-#include "polygon.h"
-#include "texture.h"
-#include "player.h"
-#include "enemy.h"
 #include "input.h"
 #include "imgui_setup.h"
 #include "sound.h"
+#include "audio_clip.h"
 #include "scene.h"
+#include "title_scene.h"
+#include "result_scene.h"
+#include "game_scene.h"
+#include "notes.h"
+#include "texture_manager.h"
 
-Scene* g_Scene;
+
+Scene* CManager::m_pScene = nullptr;
+Notes* g_Notes;
 
 void CManager::Init()
 {
 	CRenderer::Init();
 	Input::Init();
-
+	CAudioClip::Init();
 	//CTexture::TextureLoad();
-	g_Scene = new Scene();
-	g_Scene->Init();
-
-	ImguiSetup::Init();
+	SetScene<TitleScene>();
 	//g_Sound = new Sound;
 	Sound::Init("asset/sound/FIRE-GROUND.wav", 114);
+	Notes::Load("asset/music_score/fireground.csv");
+
+	ImguiSetup::Init();
 }
 
 void CManager::Uninit()
 {
-	g_Scene->UnInit();
-	delete g_Scene;
+	m_pScene->UnInit();
+	delete m_pScene;
+
+	delete g_Notes;
 	//Input::UnInit(); ‚Ü‚¾ì‚Á‚Ä‚¢‚È‚¢
 	CRenderer::Uninit();
-	ImguiSetup::UnInit();
 	Sound::UnInit();
+	TextureManager::Release();
+	ImguiSetup::UnInit();
+	CAudioClip::Uninit();
 }
 
 void CManager::Update()
@@ -46,9 +52,9 @@ void CManager::Update()
 	Input::Update();
 	Sound::Update();
 	ImguiSetup::Update();
-	g_Scene->Update();
+	m_pScene->Update();
 	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
-		Sound::Start();
+//		Sound::Start();
 	}
 	if (Input::Keyboard_IsTrigger(VK_SPACE)) {
 		Sound::Reset();
@@ -58,12 +64,12 @@ void CManager::Update()
 void CManager::Draw()
 {
 	CRenderer::Begin();
-	g_Scene->Draw();
+	m_pScene->Draw();
 	ImguiSetup::Draw();
 	CRenderer::End();
 
 }
 
 Scene* CManager::GetScene() {
-	return g_Scene;
+	return m_pScene;
 }

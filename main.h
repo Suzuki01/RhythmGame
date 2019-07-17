@@ -14,6 +14,13 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <vector>
+
 using namespace DirectX;
 
 #pragma comment(lib, "assimp.lib")

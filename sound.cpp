@@ -25,8 +25,7 @@ BOOL Sound::Init(char* name, int bpm) {
 	m_wh.lpData = (LPSTR)m_lpWaveData;
 	m_wh.dwBufferLength = dwDataSize;
 	m_wh.dwFlags = 0;
-
-
+	waveOutPrepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
 }
 
 void Sound::UnInit() {
@@ -102,7 +101,6 @@ BOOL Sound::ReadWaveFile(LPTSTR lpszFileName, LPWAVEFORMATEX lpwf, LPBYTE* lplpD
 }
 
 void Sound::Start() {
-	waveOutPrepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
 	waveOutWrite(m_hwo, &m_wh, sizeof(WAVEHDR));
 }
 
@@ -123,5 +121,7 @@ float Sound::GetCurrentBeats() {
 }
 
 void Sound::Reset() {
+	waveOutRestart(m_hwo);
 	waveOutReset(m_hwo);
 }
+
