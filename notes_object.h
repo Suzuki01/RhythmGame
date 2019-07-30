@@ -13,5 +13,5 @@ public:
 private:
 	std::list<CModel*> m_pModel;
 };
-
+int Judgement(float currentBeats, float judgeBeats);
 #endif // !NOTES_OBJECT_H_

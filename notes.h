@@ -16,6 +16,8 @@ private:
 	static std::vector<std::string> split(std::string& input, char delimiter);
 	static int maxNotes;
 	static Note m_Notes[];
+	static int m_playingNoteNumber;
+	static int m_createLeadNoteNumber;
 public:
 	static void Load(char* fileName);
 	static void Draw();
@@ -24,6 +26,9 @@ public:
 	static float GetNotesTime(int index);
 	static bool IsCreateNotes(int index);
 	static void Create(int index);
+	static void Destory();
+	static float GetCurrentNotesTime();
+	static float GetFirstNotesTime();
 };
 
 #endif // !NOTES_H_
