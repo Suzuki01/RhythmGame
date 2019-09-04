@@ -6,13 +6,7 @@
 #include "input.h"
 #include "camera.h"
 #include "texture.h"
-#include "model.h"
-#include "player.h"
-#include "bullet.h"
-#include "enemy.h"
-#include "field.h"
-#include "mesh_field.h"
-#include "polygon.h"
+#include "texture_manager.h"
 #include "scene.h"
 #include "bill_board.h"
 
@@ -30,15 +24,13 @@ BillBoard::BillBoard() {
 
 BillBoard::~BillBoard() {
 	m_VertexBuffer->Release();
-	m_Texture->Unload();
-	delete m_Texture;
 }
 
-void BillBoard::Init() {
+void BillBoard::Init(char* fileName) {
 	// 頂点バッファ生成
 	{
 		m_Transform.Position = { 0,0,0 };
-		m_Transform.Scale = { 1.0f,1.0f,1.0f };
+		m_Transform.Scale = { 3.0f,3.0f,3.0f };
 		//頂点データ
 		static const BillBoardVertex v[] = {
 			{ XMFLOAT3(0.0f,1.0f,0.0f),XMFLOAT3(0.0f,0.0f,-1.0f),XMFLOAT4(1.0f,1.0f,1.0f,1.0f),XMFLOAT2(0,0) },
@@ -62,11 +54,11 @@ void BillBoard::Init() {
 	}
 	//テクスチャ読み込み
 	m_Texture = new CTexture();
-	//	m_Texture->Load("asset/field004.tga");
-	m_Texture->LoadTexture("asset/jo.png");
+	m_Texture = TextureManager::Load(fileName);
 }
 
 void BillBoard::UnInit() {
+
 }
 
 void BillBoard::Draw() {
@@ -79,6 +71,10 @@ void BillBoard::Draw() {
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->Draw(4, 0);//ポリゴン描画
 
+}
+
+void BillBoard::Update()
+{
 }
 
 /*

@@ -6,6 +6,7 @@ BYTE	Input::triggerKey[NUM_KEY_MAX] = {};
 BYTE	Input::releaseKey[NUM_KEY_MAX] = {};
 
 void Input::Init() {
+
 }
 
 

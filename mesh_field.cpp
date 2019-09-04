@@ -2,6 +2,7 @@
 #include "renderer.h"
 #include "game_object.h"
 #include "texture.h"
+#include "texture_manager.h"
 #include "mesh_field.h"
 
 
@@ -28,8 +29,7 @@ void MeshField::Init(float width, float height, int Max, int sideMax, int length
 	gridMax = Max;
 	vertexNum = ((sideMax + 1) * (lengthMax + 1));
 	indexNum = ((sideMax + 1) * 2 * lengthMax) + ((lengthMax - 1) * 2);
-	Texture = new CTexture();
-	Texture->LoadTexture("asset/field004.tga");
+	Texture = TextureManager::Load("asset/field004.tga");
 	
 	pMeshFieldVertex = new MeshFieldVertex[vertexNum];
 	float posX = 0, posZ = 0;
@@ -39,7 +39,7 @@ void MeshField::Init(float width, float height, int Max, int sideMax, int length
 		float startZ = (height * lengthMax / 2);
 		posX = 0;
 		for (int j = 0; j < sideMax + 1; j++) {
-			pMeshFieldVertex[num].position = XMFLOAT3( startX + (j * width),g_FieldHeight[i][j],startZ - (i * height) );
+			pMeshFieldVertex[num].position = XMFLOAT3( startX + (j * width),-0.8f,startZ - (i * height) );
 			pMeshFieldVertex[num].normal =   XMFLOAT3( 0,1.0f,0 );
 			pMeshFieldVertex[num].color = XMFLOAT4(1.0f,1.0f,1.0f,1.0f);
 			pMeshFieldVertex[num].texcoord = XMFLOAT2(j, i);

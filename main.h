@@ -2,6 +2,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <math.h>
 #define NOMINMAX
 #include <windows.h>
 #undef NOMINMAX
@@ -14,6 +15,14 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
+
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <vector>
+#include <map>
+
 using namespace DirectX;
 
 #pragma comment(lib, "assimp.lib")

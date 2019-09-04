@@ -1,6 +1,7 @@
 #include "main.h"
 #include "renderer.h"
 #include "texture.h"
+#include "texture_manager.h"
 #include "input.h"
 #include "model.h"
 
@@ -94,7 +95,7 @@ void CModel::Draw()
 		CRenderer::SetTexture( m_SubsetArray[i].Material.Texture );
 
 		// ƒ|ƒŠƒSƒ“•`‰æ
-		CRenderer::DrawIndexed( m_SubsetArray[i].IndexNum, m_SubsetArray[i].StartIndex, 0 );
+ 		CRenderer::DrawIndexed( m_SubsetArray[i].IndexNum, m_SubsetArray[i].StartIndex, 0 );
 	}
 
 }
@@ -153,15 +154,13 @@ void CModel::Load( const char *FileName )
 			m_SubsetArray[i].Material.Material = model.SubsetArray[i].Material.Material;
 
 			m_SubsetArray[i].Material.Texture = new CTexture();
-			m_SubsetArray[i].Material.Texture->LoadTexture( model.SubsetArray[i].Material.TextureName );
-
+			m_SubsetArray[i].Material.Texture = TextureManager::Load(model.SubsetArray[i].Material.TextureName);
 		}
 	}
 
 	delete[] model.VertexArray;
 	delete[] model.IndexArray;
 	delete[] model.SubsetArray;
-
 }
 
 
@@ -170,15 +169,8 @@ void CModel::Unload()
 	m_VertexBuffer->Release();
 	m_IndexBuffer->Release();
 
-	for (unsigned short i = 0; i < m_SubsetNum; i++)
-	{
-		m_SubsetArray[i].Material.Texture->Unload();
-		delete m_SubsetArray[i].Material.Texture;
-	}
-
 
 	delete[] m_SubsetArray;
-
 }
 
 
@@ -414,9 +406,7 @@ void CModel::LoadObj( const char *FileName, MODEL *Model )
 		Model->SubsetArray[ sc - 1 ].IndexNum = ic - Model->SubsetArray[ sc - 1 ].StartIndex;
 
 
-
-
-
+	fclose(file);
 	delete[] positionArray;
 	delete[] normalArray;
 	delete[] texcoordArray;
@@ -529,7 +519,7 @@ void CModel::LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray,
 		}
 	}
 
-
+	fclose(file);
 	*MaterialArray = materialArray;
 	*MaterialNum = materialNum;
 }
