@@ -9,23 +9,36 @@ float  Sound::m_dwSecond = 0;
 float time = 0;
 MMTIME Sound::m_mmt = { 0 };
 int Sound::m_bpm = 0;
+int Sound::m_playLength = 0;
+
+typedef struct {
+	char* song;
+	int bpm;
+}SongData;
+
+SongData data[] = {
+	{{"asset/sound/kurumiwari_ningyou.wav"},144 },
+	{{"asset/sound/tengokuto_jigoku.wav"},83},
+};
 
 
-BOOL Sound::Init(char* name, int bpm) {
+BOOL Sound::Init(int id) {
 	DWORD dwDataSize;
-	m_bpm = bpm;
-	if (!ReadWaveFile((LPTSTR)TEXT(name), &m_wf, &m_lpWaveData, &dwDataSize))
+	m_bpm = data[id].bpm;
+	if (!ReadWaveFile((LPTSTR)TEXT(data[id].song), &m_wf, &m_lpWaveData, &dwDataSize))
 		return -1;
 
 	if (waveOutOpen(&m_hwo, WAVE_MAPPER, &m_wf, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR) {
 		MessageBox(NULL, TEXT("WAVEデバイスのオープンに失敗しました。"), NULL, MB_ICONWARNING);
 		return -1;
 	}
-
+	//waveOutSetVolume(m_hwo,900);
 	m_wh.lpData = (LPSTR)m_lpWaveData;
 	m_wh.dwBufferLength = dwDataSize;
 	m_wh.dwFlags = 0;
 	waveOutPrepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
+
+	m_playLength = m_wh.dwBufferLength / m_wf.nBlockAlign;
 }
 
 void Sound::UnInit() {
@@ -37,13 +50,12 @@ void Sound::UnInit() {
 
 	if (m_lpWaveData != NULL)
 		HeapFree(GetProcessHeap(), 0, m_lpWaveData);
-}
+ }
 
 void Sound::Update() {
 
 	m_mmt.wType = TIME_SAMPLES;
 	waveOutGetPosition(m_hwo, &m_mmt, sizeof(MMTIME)); //
-
 	m_dwSecond = (float)m_mmt.u.cb / (float)m_wf.nSamplesPerSec; //cb今流してるサンプリングデータの番号　wf.nSam 一秒間に何サンプリング
 }
 
@@ -108,8 +120,8 @@ float Sound::GetTime() {
 	return m_dwSecond;
 }
 
-DWORD Sound::GetSamplingNumber() {
-	return m_mmt.u.cb;
+int Sound::GetSamplingNumber() {
+	return (int)m_mmt.u.cb;
 }
 
 DWORD Sound::GetCurrentSamplingPerSec() {
@@ -125,3 +137,6 @@ void Sound::Reset() {
 	waveOutReset(m_hwo);
 }
 
+int Sound::GetSongSize() {
+	return m_playLength;
+}

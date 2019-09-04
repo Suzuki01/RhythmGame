@@ -6,7 +6,8 @@ private:
 	CTexture* m_Texture = NULL;
 public:
 	void Init(char* fileName,int startX, int startY, int x, int y);
-	void Uninit();
+	void UnInit();
 	void Update();
 	void Draw();
+	void Draw(char* fileName);
 };

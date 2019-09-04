@@ -1,6 +1,7 @@
 #include "main.h"
 #include "renderer.h"
 #include "sound.h"
+#include "score.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
@@ -45,6 +46,8 @@ void ImguiSetup::Draw() {
 	ImGui::Text("Current Time  = %f", Sound::GetTime());
 	ImGui::Text("Current Beats = %f", Sound::GetCurrentBeats());
 	ImGui::Text("Current Sampling Number = %d", Sound::GetSamplingNumber());
+	ImGui::Text("Sound Size = %d", Sound::GetSongSize());
+	ImGui::Text("Score = %f",Score::GetScore());
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::End();

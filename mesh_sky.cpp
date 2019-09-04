@@ -1,8 +1,4 @@
-#include "main.h"
-#include "renderer.h"
-#include "texture.h"
-#include "math.h"
-#include "input.h"
+#include "mesh_sky.h"
 
 //3Dポリゴン頂点　構造体
 typedef struct
@@ -15,7 +11,6 @@ typedef struct
 }MeshSkyVertex;
 
 //②FVFの定義
-#define FVF_VERTEX3D (D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_DIFFUSE|D3DFVF_TEX1)		// 3Dポリゴン頂点フォーマット
 #define MAX_MESH_FIELD (5000)
 
 MeshSkyVertex* g_pMfield[MAX_MESH_FIELD];
@@ -29,13 +24,14 @@ ID3D11Buffer* fm_VertexBuffer = NULL;
 
 //インデックスバッファ
 ID3D11Buffer* fm_IndexBuffer = NULL;
+CTexture* m_texture = NULL;
 
 
-void Mesh_Skydome_Initialize(float meshH, float radius, int meshXnum, int meshYnum)
+void MeshSky::Init(float meshH, float radius, int meshXnum, int meshYnum)
 {
 	int VertexX = meshXnum + 1;	//	最大頂点X
 	int VertexY = meshYnum + 1;	//	最大頂点Z
-
+	m_texture = TextureManager::Load("asset/sky.png");
 	g_VertexCount = (VertexX)* (VertexY);
     g_IndexCount = (meshXnum + 2) * (meshYnum * 2) - 2;
 	g_PrimitiveCount = (meshXnum * 2 + 4) * meshYnum - 4;
@@ -53,8 +49,9 @@ void Mesh_Skydome_Initialize(float meshH, float radius, int meshXnum, int meshYn
 				int n = x + VertexX * y;
 				m_pMfield[n].pos = XMFLOAT3(0, meshYnum * meshH, 0);
 				m_pMfield[n].normal = XMFLOAT3(0.0, 1.0, 0.0);
-				m_pMfield[n].color = XMFLOAT4(255, 255, 255, 255);
-				m_pMfield[n].uv = XMFLOAT2(x * (1.0f / meshXnum), y * (1.0f / meshYnum));
+				m_pMfield[n].color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	//			m_pMfield[n].uv = XMFLOAT2(x * (1.0f / meshXnum), y * (1.0f / meshYnum));
+				m_pMfield[n].uv = XMFLOAT2(x, y);
 			}
 		}
 		else
@@ -69,16 +66,15 @@ void Mesh_Skydome_Initialize(float meshH, float radius, int meshXnum, int meshYn
 				m_pMfield[n].pos = XMFLOAT3(radius / VertexY * y * sinf(XMConvertToRadians(angle)), (meshYnum * meshH) - Subtotal, radius / VertexY * y * cosf(XMConvertToRadians(angle)));
 				m_pMfield[n].normal = XMFLOAT3(0.0, 1.0, 0.0);
 				m_pMfield[n].color = XMFLOAT4(255, 255, 255, 255);
-				m_pMfield[n].uv = XMFLOAT2(x * (1.0f / meshXnum), y * (1.0f / meshYnum));
+//				m_pMfield[n].uv = XMFLOAT2(x * (1.0f / meshXnum), y * (1.0f / meshYnum));
+				m_pMfield[n].uv = XMFLOAT2(x, y);
 			}
 		}
 
 	}
 
-
-
 	// 仮想アドレス　
-	WORD *Ipv;
+	WORD* Ipv = new WORD[g_IndexCount];
 
 	for (int y = 0; y < meshYnum * 2 - 1; y++)
 	{
@@ -102,7 +98,7 @@ void Mesh_Skydome_Initialize(float meshH, float radius, int meshXnum, int meshYn
 			Ipv[(VertexX * 2)*(y - meshYnum + 1) + (2 * (y - meshYnum)) + 1] = VertexX * (y - meshYnum + 2);
 		}
 	}
-
+	
 	// 頂点バッファ生成
 	{
 		D3D11_BUFFER_DESC bd;
@@ -134,18 +130,19 @@ void Mesh_Skydome_Initialize(float meshH, float radius, int meshXnum, int meshYn
 
 		CRenderer::GetDevice()->CreateBuffer(&bd, &sd, &fm_IndexBuffer);
 	}
-
-
-
+	m_Transform.Scale = { 1.0f,1.0f,1.0f };
+	m_Transform.Position = { 0.0f,0.0f,7.0f };
 }
 
 
-void MeshSky_Finalize(void)
+void MeshSky::UnInit(void)
 {
+
 }
 
-void MeshSky_Update(void)
+void MeshSky::Update(void)
 {
+
 //	D3DXVECTOR3 CameraFront = GetCameraFrontVector();
 //	D3DXVECTOR3 CameraRight = GetCameraRightVector();
 //	D3DXVECTOR3 f(CameraFront);
@@ -177,22 +174,19 @@ void MeshSky_Update(void)
 	}*/
 }
 
-void MeshSky_Draw(int texture_index)
-{/*
+void MeshSky::Draw()
+{
+	
 	// テクスチャ設定
-	CRenderer::SetTexture();
+	CRenderer::SetTexture(m_texture);
 	// 頂点バッファ設定
-	CRenderer::SetVertexBuffers(m_VertexBuffer);
+	CRenderer::SetVertexBuffers(fm_VertexBuffer);
 	// インデックスバッファ設定
-	CRenderer::SetIndexBuffer(m_IndexBuffer);
+	CRenderer::SetIndexBuffer(fm_IndexBuffer);
 	//D3DXMatrixIdentity(&mtxWorld);		//単位行列を作る
 	XMMATRIX viewMatrix = XMMatrixTranslation(0,0,0);
+	m_Transform.SetWorldMatrix();
 
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->DrawIndexed(g_IndexCount, 0, 0);
-
-	pDevice->SetStreamSource(0, g_pVertexBuffer, 0, sizeof(MeshSkyVertex));
-	pDevice->SetIndices(g_pIndexBuffer);
-	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, g_VertexCount, 0, g_PrimitiveCount);
-	*/
 }

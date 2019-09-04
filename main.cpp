@@ -4,7 +4,7 @@
 #include "imgui_impl_win32.h"
 
 const char* CLASS_NAME = "DX11AppClass";
-const char* WINDOW_NAME = "DX11-2Dポリゴン描画（テクスチャ貼り付け）まで";
+const char* WINDOW_NAME = "Sound Freak";
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

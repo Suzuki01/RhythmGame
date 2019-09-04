@@ -26,7 +26,7 @@ BillBoard::~BillBoard() {
 	m_VertexBuffer->Release();
 }
 
-void BillBoard::Init() {
+void BillBoard::Init(char* fileName) {
 	// 頂点バッファ生成
 	{
 		m_Transform.Position = { 0,0,0 };
@@ -54,7 +54,7 @@ void BillBoard::Init() {
 	}
 	//テクスチャ読み込み
 	m_Texture = new CTexture();
-	m_Texture = TextureManager::Load("asset/jo.png");
+	m_Texture = TextureManager::Load(fileName);
 }
 
 void BillBoard::UnInit() {

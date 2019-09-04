@@ -95,7 +95,7 @@ void CModel::Draw()
 		CRenderer::SetTexture( m_SubsetArray[i].Material.Texture );
 
 		// ƒ|ƒŠƒSƒ“•`‰æ
-		CRenderer::DrawIndexed( m_SubsetArray[i].IndexNum, m_SubsetArray[i].StartIndex, 0 );
+ 		CRenderer::DrawIndexed( m_SubsetArray[i].IndexNum, m_SubsetArray[i].StartIndex, 0 );
 	}
 
 }
@@ -161,7 +161,6 @@ void CModel::Load( const char *FileName )
 	delete[] model.VertexArray;
 	delete[] model.IndexArray;
 	delete[] model.SubsetArray;
-
 }
 
 
@@ -169,6 +168,8 @@ void CModel::Unload()
 {
 	m_VertexBuffer->Release();
 	m_IndexBuffer->Release();
+
+
 	delete[] m_SubsetArray;
 }
 
@@ -405,9 +406,7 @@ void CModel::LoadObj( const char *FileName, MODEL *Model )
 		Model->SubsetArray[ sc - 1 ].IndexNum = ic - Model->SubsetArray[ sc - 1 ].StartIndex;
 
 
-
-
-
+	fclose(file);
 	delete[] positionArray;
 	delete[] normalArray;
 	delete[] texcoordArray;
@@ -520,7 +519,7 @@ void CModel::LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray,
 		}
 	}
 
-
+	fclose(file);
 	*MaterialArray = materialArray;
 	*MaterialNum = materialNum;
 }

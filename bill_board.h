@@ -6,7 +6,7 @@ private:
 	ID3D11Buffer* m_VertexBuffer = NULL;
 	CTexture* m_Texture;
 public:
-	void Init();
+	void Init(char* fileName);
 	void Draw();
 	void Update();
 	void UnInit();

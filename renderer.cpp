@@ -17,6 +17,7 @@ ID3D11DepthStencilView* CRenderer::m_DepthStencilView = NULL;
 ID3D11VertexShader*     CRenderer::m_VertexShader = NULL;
 ID3D11PixelShader*      CRenderer::m_PixelShader = NULL;
 ID3D11InputLayout*      CRenderer::m_VertexLayout = NULL;
+ID3D11BlendState*		CRenderer::m_pBlendState = NULL;
 ID3D11Buffer*			CRenderer::m_WorldBuffer = NULL;
 ID3D11Buffer*			CRenderer::m_ViewBuffer = NULL;
 ID3D11Buffer*			CRenderer::m_ProjectionBuffer = NULL;
@@ -122,6 +123,12 @@ void CRenderer::Init()
 	m_D3DDevice->CreateRasterizerState( &rd, &rs );
 
 	m_ImmediateContext->RSSetState( rs );
+
+	m_ImmediateContext->OMSetRenderTargets(
+		1,                                    // ターゲット
+		&m_RenderTargetView,    // ビュー
+		NULL()            // 深度バッファなし
+	);
 
 	// ブレンドステート設定
 	D3D11_BLEND_DESC blendDesc;
@@ -236,6 +243,7 @@ void CRenderer::Init()
 	hBufferDesc.MiscFlags = 0;
 	hBufferDesc.StructureByteStride = sizeof(float);
 
+
 	m_D3DDevice->CreateBuffer( &hBufferDesc, NULL, &m_WorldBuffer );
 	m_ImmediateContext->VSSetConstantBuffers( 0, 1, &m_WorldBuffer);
 
@@ -264,15 +272,12 @@ void CRenderer::Init()
 	m_ImmediateContext->VSSetShader( m_VertexShader, NULL, 0 );
 	m_ImmediateContext->PSSetShader( m_PixelShader, NULL, 0 );
 
-
-
 	// ライト初期化
 	LIGHT light;
 	light.Direction = XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f);
 	light.Diffuse = COLOR(0.9f, 0.9f, 0.9f, 1.0f);
 	light.Ambient = COLOR(0.1f, 0.1f, 0.1f, 1.0f);
 	SetLight(light);
-
 
 	// マテリアル初期化
 	MATERIAL material;
@@ -335,10 +340,10 @@ void CRenderer::SetDepthEnable( bool Enable )
 
 }
 
-void CRenderer::SetWorldViewProjection2D()
+void CRenderer::SetWorldViewProjection2D(XMFLOAT3 pos)
 {
 	XMMATRIX world;
-	world = XMMatrixIdentity();
+	world = XMMatrixTranslation(pos.x, pos.y, 0.0f);
 	m_ImmediateContext->UpdateSubresource(m_WorldBuffer, 0, NULL, &XMMatrixTranspose(world), 0, 0);
 
 	XMMATRIX view;

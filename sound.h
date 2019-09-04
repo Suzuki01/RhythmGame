@@ -10,18 +10,20 @@ public:
 	static float m_dwSecond;
 	static MMTIME m_mmt;
 	static int m_bpm;
+	static int m_playLength;
 
-	static BOOL Init(char* name, int bpm);
+	static BOOL Init(int id);
 	static void Update();
 	static void UnInit();
 	static void Start();
 	static void Draw();
 	static BOOL ReadWaveFile(LPTSTR lpszFileName, LPWAVEFORMATEX lpwf, LPBYTE* lplpData, LPDWORD lpdwDataSize);
 	static float GetTime();
-	static DWORD GetSamplingNumber();
+	static int GetSamplingNumber();
 	static DWORD GetCurrentSamplingPerSec();
 	static float GetCurrentBeats();
 	static void Reset();
+	static int GetSongSize();
 };
 
 #endif //!SOUND_H_

@@ -12,8 +12,10 @@
 #include "title_scene.h"
 #include "result_scene.h"
 #include "game_scene.h"
+#include "song_selection_scene.h"
 #include "notes.h"
 #include "texture_manager.h"
+#include "mesh_sky.h"
 
 
 Scene* CManager::m_pScene = nullptr;
@@ -27,10 +29,9 @@ void CManager::Init()
 	//CTexture::TextureLoad();
 	SetScene<TitleScene>();
 	//g_Sound = new Sound;
-	Sound::Init("asset/sound/FIRE-GROUND.wav", 114);
-	Notes::Load("asset/music_score/fireground.csv");
-
+#if defined(_DEBUG) || defined(DEBUG)
 	ImguiSetup::Init();
+#endif
 }
 
 void CManager::Uninit()
@@ -41,17 +42,23 @@ void CManager::Uninit()
 	delete g_Notes;
 	//Input::UnInit(); ‚Ü‚¾ì‚Á‚Ä‚¢‚È‚¢
 	CRenderer::Uninit();
-	Sound::UnInit();
 	TextureManager::Release();
+
+#if defined(_DEBUG) || defined(DEBUG)
 	ImguiSetup::UnInit();
+#endif
+
 	CAudioClip::Uninit();
+
 }
 
 void CManager::Update()
 {
 	Input::Update();
 	Sound::Update();
+#if defined(_DEBUG) || defined(DEBUG)
 	ImguiSetup::Update();
+#endif
 	m_pScene->Update();
 	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
 //		Sound::Start();
@@ -65,9 +72,10 @@ void CManager::Draw()
 {
 	CRenderer::Begin();
 	m_pScene->Draw();
+#if defined(_DEBUG) || defined(DEBUG)
 	ImguiSetup::Draw();
+#endif
 	CRenderer::End();
-
 }
 
 Scene* CManager::GetScene() {

@@ -93,6 +93,7 @@ private:
 	static ID3D11Buffer*			m_ProjectionBuffer;
 	static ID3D11Buffer*			m_MaterialBuffer;
 	static ID3D11Buffer*			m_LightBuffer;
+	static ID3D11BlendState*		m_pBlendState;
 
 /*
 	static XMMATRIX				m_WorldMatrix;
@@ -110,7 +111,7 @@ public:
 	static void End();
 
 	static void SetDepthEnable(bool Enable);
-	static void SetWorldViewProjection2D();
+	static void SetWorldViewProjection2D(XMFLOAT3 pos);
 	static void SetWorldMatrix(XMMATRIX * WorldMatrix);
 	static void SetViewMatrix(XMMATRIX * ViewMatrix);
 	static void SetProjectionMatrix(XMMATRIX * ProjectionMatrix);

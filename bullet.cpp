@@ -16,7 +16,7 @@ Bullet::Bullet() {
 	m_Transform.Scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 	m_Transform.Rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_BillBoard = new BillBoard();
-	m_BillBoard->Init();
+	m_BillBoard->Init("asset/jo.png");
 }
 
 Bullet::~Bullet() {
