@@ -47,20 +47,6 @@ private:
 	void LoadObj( const char *FileName, MODEL *Model );
 	void LoadMaterial( const char *FileName, MODEL_MATERIAL **MaterialArray, unsigned short *MaterialNum );
 
-	ID3D11Device* dev;
-	ID3D11DeviceContext* devcon;
-	std::vector<Mesh> meshes;
-	std::string directory;
-	std::vector<Texture> textures_loaded;
-	HWND hwnd;
-
-	void processNode(aiNode* node, const aiScene* scene);
-	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
-	std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName, const aiScene* scene);
-	std::string determineTextureType(const aiScene* scene, aiMaterial* mat);
-	int getTextureIndex(aiString* str);
-	ID3D11ShaderResourceView* getTextureFromModel(const aiScene* scene, int textureindex);
-
 public:
 	void Init();
 	void UnInit();
@@ -69,7 +55,4 @@ public:
 	XMFLOAT3 Position;
 	void Load( const char *FileName );
 	void Unload();
-	bool Load(ID3D11Device* dev, ID3D11DeviceContext* devcon, std::string filename);
-	void Draw(ID3D11DeviceContext* devcon);
-	void Close();
 };

@@ -7,6 +7,7 @@ void EditorScene::Init()
 
 void EditorScene::UnInit()
 {
+
 }
 
 void EditorScene::Update()
