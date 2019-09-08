@@ -10,7 +10,9 @@ struct MESH {
 	ID3D11Buffer* VertexBuffer;
 	ID3D11Buffer* IndexBuffer;
 	unsigned int IndexNum;
+	CTexture* texture;
 };
+
 
 class ModelAnimation {
 private:

@@ -3,7 +3,7 @@
 
 void ModelAnimation::Load(const char* FileName)
 {
-	m_Scene = aiImportFile(FileName, aiProcessPreset_TargetRealtime_MaxQuality);
+	m_Scene = aiImportFile(FileName, aiProcessPreset_TargetRealtime_MaxQuality | aiProcess_Triangulate);
 	m_MeshNum = m_Scene->mNumMeshes;
 	m_Mesh = new MESH[m_MeshNum];
 
@@ -21,12 +21,33 @@ void ModelAnimation::Load(const char* FileName)
 		aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &ambientColor);
 		aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &shininess);
 
+		const std::string modelPath = FileName;
+		size_t pos = modelPath.find_last_of("\\/"); //テクスチャの場所を取得
+		std::string basePath = modelPath.substr(0, pos + 1);
+
+		for (unsigned int m = 0; m < m_Scene->mNumMaterials; m++) {
+			aiString path;
+			if (m_Scene->mMaterials[m]->GetTexture(aiTextureType_DIFFUSE, 0, &path) == AI_SUCCESS) {
+				std::string fileloc = basePath + path.data;
+				m_Mesh[i].texture = TextureManager::Load(fileloc);
+			}
+			else {
+				m_Mesh[i].texture = TextureManager::Load("asset/nothing.png");
+			}
+		}
+
+		//m_Scene->mMaterials[mesh->mMaterialIndex]->GetTexture();
 		for (int i = 0; i < mesh->mNumVertices; i++) {
 			vertex[i].Position = XMFLOAT3{ mesh->mVertices[i].x,mesh->mVertices[i].y,mesh->mVertices[i].z };
 			vertex[i].Normal = XMFLOAT3{ mesh->mNormals[i].x,mesh->mNormals[i].y,mesh->mNormals[i].z };
 			vertex[i].Diffuse = XMFLOAT4{ diffuseColor.r,diffuseColor.g,diffuseColor.b,diffuseColor.a };
-			//		vertex[i].TexCoord = XMFLOAT2{ mesh->mTextureCoords[i]->x,mesh->mTextureCoords[i]->y };
-			vertex[i].TexCoord = XMFLOAT2{ 0,0 };
+			if (mesh->HasTextureCoords(0)) {
+				vertex[i].TexCoord = XMFLOAT2{ mesh->mTextureCoords[0][i].x,mesh->mTextureCoords[0][i].y };
+			}
+			else {
+				vertex[i].TexCoord = XMFLOAT2{ 0,0 };
+			}
+			//vertex[i].TexCoord = XMFLOAT2{ 0,0 };
 		}
 
 		// 頂点バッファ生成
@@ -100,7 +121,6 @@ void ModelAnimation::Draw(XMMATRIX &Matrix)
 
 void ModelAnimation::DrawMesh(aiNode* Node,XMMATRIX &Matrix)
 {
-	
 	aiMatrix4x4 matrix = Node->mTransformation; //相対的な位置　（親から見た位置）
 	aiTransposeMatrix4(&matrix); //転置行列作成 assimpとdirectxの行列が逆のため
 	XMMATRIX world = XMLoadFloat4x4((XMFLOAT4X4*)& matrix);
@@ -114,7 +134,7 @@ void ModelAnimation::DrawMesh(aiNode* Node,XMMATRIX &Matrix)
 
 		//メッシュ描画
 		CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
-	//	CRenderer::SetTexture(m_Texture);
+		CRenderer::SetTexture(m_Mesh[m].texture);
 		CRenderer::SetVertexBuffers(m_Mesh[m].VertexBuffer);
 		CRenderer::SetIndexBuffer(m_Mesh[m].IndexBuffer);
 		CRenderer::DrawIndexed(m_Mesh[m].IndexNum, 0, 0);

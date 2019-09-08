@@ -27,11 +27,11 @@ void CCamera::Uninit()
 void CCamera::Update()
 {
 	//è„
-/*	if (Input::Keyboard_IsPress('W')) {
+	if (Input::Keyboard_IsPress('W')) {
 		m_Transform.Position.z += 0.1f;
-	}*/
+	}
 	//â∫
-/*	if (Input::Keyboard_IsPress('S')) {
+	if (Input::Keyboard_IsPress('S')) {
 		m_Transform.Position.z -= 0.1f;
 	}
 	//ç∂
@@ -42,12 +42,18 @@ void CCamera::Update()
 	if (Input::Keyboard_IsPress('D')) {
 		m_Transform.Position.x += 0.1f;
 	}
+	if (Input::Keyboard_IsPress('R')) {
+		m_Transform.Position.y += 0.1f;
+	}
+	if (Input::Keyboard_IsPress('F')) {
+		m_Transform.Position.y -= 0.1f;
+	}
 	if (Input::Keyboard_IsPress('L')) {
 		m_Transform.Rotation.y += 0.01f;
 	}
 	if (Input::Keyboard_IsPress('K')) {
 		m_Transform.Rotation.y -= 0.01f;
-	}*/
+	}
 }
 
 
