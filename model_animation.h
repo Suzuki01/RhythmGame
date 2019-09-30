@@ -22,13 +22,20 @@ private:
 	MESH* m_Mesh;
 	MESH** mesh;
 	unsigned int m_MeshNum;
-	const aiScene* m_Scene;
+	const aiScene* m_Scene[3];
 	unsigned int m_IndexNum;
+	int m_AnimationID;
 public:
+	std::map<std::string, aiQuaternion> m_NodeRotation;
+	std::map<std::string, aiVector3D> m_NodePosition;
+	void Update(int AnimationID, int AnimationID2, float Blend, int Frame);
 	void Draw(XMMATRIX &Matrix);
 	void DrawMesh(aiNode* Node, XMMATRIX &Matrix);
+	void DrawMeshAnimation(aiNode* Node,XMMATRIX &Matrix);
 	void Load(const char* FileName);
 	void Unload();
+	void SetAnimation(int id);
+	int GetAnimationID(void);
 };
 
 #endif

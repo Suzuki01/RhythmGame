@@ -1,13 +1,18 @@
-#pragma once
+#ifndef PLAYER_H_
+#define PLAYER_H_
 
-class CModel;
+class ModelAnimation;
 
 class Player : public GameObject {
 public:
-	CModel* m_Model;
+	ModelAnimation* m_pModel;
+	XMMATRIX matrix;
 	//‰eƒNƒ‰ƒX‚ª“ü‚é
 	void Init();
 	void Update();
 	void Draw();
 	void UnInit();
+	void Jump();
 };
+
+#endif

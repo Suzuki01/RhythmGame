@@ -39,7 +39,7 @@ void Field::Init() {
 
 	//テクスチャ読み込み
 	m_Texture = new CTexture();
-	m_Texture->LoadTexture("asset/background.png");
+	m_Texture->LoadTexture("asset/sina-to.jpg");
 	m_Transform.Scale = { 10.0f, 1.0f, 1.0f };
 	m_Transform.Position = { 0.0f,0.0f,0.0f };
 }

@@ -1,11 +1,17 @@
 #include "main.h"
 #include "renderer.h"
+#include "game_object.h"
+#include "manager.h"
 #include "sound.h"
 #include "score.h"
+#include "scene.h"
+#include "test_scene.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_setup.h"
+
+bool ImguiSetup::m_isChange = false;
 
 void ImguiSetup::Init() {
 	IMGUI_CHECKVERSION();
@@ -26,6 +32,11 @@ void ImguiSetup::Update() {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
+	if (m_isChange) {
+		m_isChange = false;
+		CManager::SetScene<TestScene>();
+	}
 }
 
 void ImguiSetup::Draw() {
@@ -48,6 +59,7 @@ void ImguiSetup::Draw() {
 	ImGui::Text("Current Sampling Number = %d", Sound::GetSamplingNumber());
 	ImGui::Text("Sound Size = %d", Sound::GetSongSize());
 	ImGui::Text("Score = %f",Score::GetScore());
+	ImGui::Checkbox("Transition Test Scene",&m_isChange);
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::End();

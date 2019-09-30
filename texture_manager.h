@@ -6,6 +6,7 @@
 class TextureManager {
 public:
 	static CTexture* Load(std::string FileName);
+	static CTexture* MemoryLoad(std::string FileName, aiTexture* aiTex);
 	static void Release();
 private:
 	static std::unordered_map<std::string,CTexture*>m_TextureIdMap;

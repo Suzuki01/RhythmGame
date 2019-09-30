@@ -1,6 +1,5 @@
 #include "notes.h"
 
-#define JUDGMENT_IMAGE_MAX	(3)
 #define RANE_MAX	(2)	
 #define NOTE_MAX	(1000)
 
@@ -12,7 +11,7 @@ std::vector <Note*> g_Notes1;
 std::vector <Note*> g_Notes2;
 bool Notes::isEnd;
 int Notes::endCount;
-JudgmentImage Notes::judgementImage[JUDGMENT_IMAGE_MAX];
+JudgmentImage Notes::judgementImage[JUDGMENT_IMAGE_MAX][JUDGMENT_IMAGE_MAX];
 
 float cntTime[500] = {0};
 int cntMaxCombo = 0;
@@ -107,20 +106,24 @@ void Notes::Init() {
 	isEnd = false;
 	endCount = 0;
 	for (int i = 0; i < JUDGMENT_IMAGE_MAX; i++) {
-		judgementImage[i].billBoard = new BillBoard;
-		judgementImage[i].billBoard->Init(classImage[i]);
-		judgementImage[i].billBoard->m_Transform.Scale = { 5.0f,2.0f,1.0f };
-		judgementImage[i].justiceImageCount = 0;
-		judgementImage[i].isDisplay = false;
+		for (int j = 0; j < JUDGMENT_IMAGE_MAX; j++ ) {
+			judgementImage[i][j].billBoard = new BillBoard;
+			judgementImage[i][j].billBoard->Init(classImage[i]);
+			judgementImage[i][j].billBoard->m_Transform.Scale = { 5.0f,2.0f,1.0f };
+			judgementImage[i][j].justiceImageCount = 0;
+			judgementImage[i][j].isDisplay = false;
+		}
 	}
 }
 
 void Notes::UnInit() {
 	for (int i = 0; i < JUDGMENT_IMAGE_MAX; i++) {
-		judgementImage[i].billBoard->UnInit();
-		delete judgementImage[i].billBoard;
-		judgementImage[i].justiceImageCount = 0;
-		judgementImage[i].isDisplay = false;
+		for (int j = 0; j < JUDGMENT_IMAGE_MAX; j++) {
+			judgementImage[i][j].billBoard->UnInit();
+			delete judgementImage[i][j].billBoard;
+			judgementImage[i][j].justiceImageCount = 0;
+			judgementImage[i][j].isDisplay = false;
+		}
 	}
 
 	/*
@@ -177,13 +180,16 @@ void Notes::Draw() {
 	}
 
 	for (int i = 0; i < JUDGMENT_IMAGE_MAX; i++) {
-		if (judgementImage[i].justiceImageCount > 60)
-			ResetJusticeImage(i);
+		for (int j = 0; j < JUDGMENT_IMAGE_MAX; j++) {
+			if (judgementImage[i][j].isDisplay) {
+				judgementImage[i][j].billBoard->Draw();
 
-		if(judgementImage[i].isDisplay)
-			judgementImage[i].billBoard->Draw();
-
-		judgementImage[i].justiceImageCount++;
+				if (judgementImage[i][j].justiceImageCount > 60) {
+					ResetJusticeImage(i, j);
+				}
+				judgementImage[i][j].justiceImageCount++;
+			}
+		}
 	}
 }
 
@@ -214,7 +220,7 @@ void Notes::Update() {
 		if (g_Notes1[i]->m_pModel->Position.z <= -0.6) {
 			if (g_Notes1[i]->isCreate) {
 				Miss(1);
-				SetJusticeImage(2);
+				SetJusticeImage(2,g_Notes1[i]->rane);
 				Score::AddScore(3);
 			}
 		}
@@ -227,27 +233,49 @@ void Notes::Update() {
 		if (g_Notes2[i]->m_pModel->Position.z <= -0.6) {
 			if (g_Notes2[i]->isCreate) {
 				Miss(2);
-				SetJusticeImage(2);
+				SetJusticeImage(2, g_Notes2[i]->rane);
 				Score::AddScore(3);
 			}
 		}
 	}
-/*	for (CModel* object : m_pModel) {
-		object->Position.z = 4.0f * g_Notes[i].time - 4.0f * Sound::GetCurrentBeats();
-		object->Update();
-		if (object->Position.z <= -0.6) {
-			if (g_Notes[i].isCreate) {
-				Miss();
-				SetJusticeImage(2);
-				Score::AddScore(3);
-			}
-		}
-		i++;
-	}*/
 	if (m_createLeadNoteNumber[0] + m_createLeadNoteNumber[1] == maxNotes) {
 		isEnd = true;
 	}
 }
+
+void Notes::Update(float currentBeats) {
+
+	for (int i = 0; i < g_Notes1.size(); i++) {
+		if (g_Notes1[i]->rane == NULL)
+			break;
+		g_Notes1[i]->m_pModel->Position.z = 4.0f * g_Notes1[i]->time - 4.0f * currentBeats;
+		g_Notes1[i]->m_pModel->Update();
+		if (g_Notes1[i]->m_pModel->Position.z <= -0.6) {
+			if (g_Notes1[i]->isCreate) {
+			//	Miss(1);
+			//	SetJusticeImage(2, g_Notes1[i]->rane);
+				Score::AddScore(3);
+			}
+		}
+	}
+	for (int i = 0; i < g_Notes2.size(); i++) {
+		if (g_Notes2[i]->rane == NULL)
+			break;
+		g_Notes2[i]->m_pModel->Position.z = 4.0f * g_Notes2[i]->time - 4.0f * currentBeats;
+		g_Notes2[i]->m_pModel->Update();
+		if (g_Notes2[i]->m_pModel->Position.z <= -0.6) {
+			if (g_Notes2[i]->isCreate) {
+			//	Miss(2);
+			//	SetJusticeImage(2, g_Notes2[i]->rane);
+				Score::AddScore(3);
+			}
+		}
+	}
+	if (m_createLeadNoteNumber[0] + m_createLeadNoteNumber[1] == maxNotes) {
+		isEnd = true;
+	}
+}
+
 
 int Notes::GetMaxNotes()
 {
@@ -306,13 +334,13 @@ int Notes::Judgement(int rane) {
 	if (judgeTime <= 0.2 && judgeTime >= -0.2f) {
 		Perfect(rane);
 		Score::AddScore(1);
-		SetJusticeImage(0);
+		SetJusticeImage(0,rane);
 		return 1;
 	}
 	else if (judgeTime <= 0.4 && judgeTime >= -0.4) {
 		Attack(rane);
 		Score::AddScore(2);
-		SetJusticeImage(1);
+		SetJusticeImage(1,rane);
 		return 2;
 	}
 	else {
@@ -351,13 +379,19 @@ void Notes::Miss(int rane)
 	Delete(rane);
 }
 
-void Notes::SetJusticeImage(int index) {
-	judgementImage[index].isDisplay = true;
+void Notes::SetJusticeImage(int index,int rane) {
+	for (int i = 0; i < JUDGMENT_IMAGE_MAX; i++) {
+		if (!judgementImage[index][i].isDisplay) {
+			judgementImage[index][i].billBoard->m_Transform.Position = { -5.0f + (rane - 1) * 10, 0.0f,0.0f };
+			judgementImage[index][i].isDisplay = true;
+			break;
+		}
+	}
 }
 
-void Notes::ResetJusticeImage(int index) {
-	judgementImage[index].isDisplay = false;
-	judgementImage[index].justiceImageCount = 0;
+void Notes::ResetJusticeImage(int index,int cnt) {
+	judgementImage[index][cnt].isDisplay = false;
+	judgementImage[index][cnt].justiceImageCount = 0;
 }
 
 void Notes::DataSave() {

@@ -26,6 +26,7 @@ class CTexture
 public:
 	void Unload();
 	bool LoadTexture(const char* FileName);
+	bool LoadMemoryTexture(const char* FileName, aiTexture* aiTex);
 	ID3D11ShaderResourceView* GetShaderResourceView(){ return m_ShaderResourceView; }
 	~CTexture();
 private:

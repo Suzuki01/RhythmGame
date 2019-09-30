@@ -17,6 +17,8 @@ public:
 	static void UnInit();
 	static void Start();
 	static void Draw();
+	static void Stop();
+	static void Restart();
 	static BOOL ReadWaveFile(LPTSTR lpszFileName, LPWAVEFORMATEX lpwf, LPBYTE* lplpData, LPDWORD lpdwDataSize);
 	static float GetTime();
 	static int GetSamplingNumber();
@@ -24,6 +26,9 @@ public:
 	static float GetCurrentBeats();
 	static void Reset();
 	static int GetSongSize();
+	static void SetTime();
+	static void SetPosition();
+	static int GetBpm();
 };
 
 #endif //!SOUND_H_

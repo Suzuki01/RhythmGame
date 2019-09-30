@@ -92,4 +92,13 @@ public:
 		GameObject->SetDestroy();
 	}
 	
+	enum {
+		CameraLayer,
+		FieldLayer,
+		SkyDomeLayer,
+		JusticeFieldLayer,
+		PlayerLayer,
+		BillboardLayer,
+		PolygonLayer,
+	};
 };

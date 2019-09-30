@@ -51,14 +51,5 @@ public:
 };
 
 
-enum {
-	CameraLayer,
-	FieldLayer,
-	SkyDomeLayer,
-	JusticeFieldLayer,
-	PlayerLayer,
-	BillboardLayer,
-	PolygonLayer,
-};
 
 #endif // !GAME_SCENE_H_

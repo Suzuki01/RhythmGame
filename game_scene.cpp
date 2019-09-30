@@ -3,11 +3,12 @@
 
 void GameScene::Init() {
 	AddGameObject<CCamera>(CameraLayer)->Init();
+	AddGameObject<Player>(PlayerLayer)->Init();
 	AddGameObject<MeshField>(FieldLayer)->Init(20, 20, 25, 5, 5);
-	AddGameObject<Field>(JusticeFieldLayer)->Init();
+/*	AddGameObject<Field>(JusticeFieldLayer)->Init();
 	AddGameObject<MeshSky>(SkyDomeLayer)->Init(1.5,42,40,40);
+*/
 //	AddGameObject<CPolygon>(PolygonLayer)->Init("asset/background.png",SCREEN_WIDTH * 0.5f - 50,0,200,5);
-//	AddGameObject<Player>(PlayerLayer)->Init();
 //	AddGameObject<BillBoard>(BillboardLayer)->Init();
 //	AddGameObject<NotesObject>(4)->Init();
 //	m_pBGM = new CAudioClip;
@@ -70,6 +71,9 @@ void GameScene::Update() {
 		if (Input::Keyboard_IsTrigger(VK_SPACE)) {
 			CManager::SetScene<ResultScene>();
 		}
+		if (Input::Keyboard_IsTrigger('K')) {
+			Sound::SetPosition();
+		}
 
 		if (Notes::EndCheck()) {
 			CManager::SetScene<ResultScene>();
@@ -80,11 +84,11 @@ void GameScene::Update() {
 void GameScene::Draw() {
 
 	Scene::Draw();
-	Score::SongPositionDraw();
+//	Score::SongPositionDraw();
 //	Notes::Draw();
 //	Score::Draw();
-	Thumbnail::Draw();
-
+//	Thumbnail::Draw();
+/*
 	switch (m_Phase) {
 	case PHASE_INDEX_READY:
 		ready->Draw();
@@ -95,6 +99,6 @@ void GameScene::Draw() {
 	default:
 		break;
 	}
-
+	*/
 
 }

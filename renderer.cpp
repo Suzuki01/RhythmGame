@@ -124,11 +124,6 @@ void CRenderer::Init()
 
 	m_ImmediateContext->RSSetState( rs );
 
-	m_ImmediateContext->OMSetRenderTargets(
-		1,                                    // ターゲット
-		&m_RenderTargetView,    // ビュー
-		NULL()            // 深度バッファなし
-	);
 
 	// ブレンドステート設定
 	D3D11_BLEND_DESC blendDesc;
@@ -163,7 +158,7 @@ void CRenderer::Init()
 	depthStencilDesc.DepthWriteMask	= D3D11_DEPTH_WRITE_MASK_ZERO;
 	m_D3DDevice->CreateDepthStencilState( &depthStencilDesc, &m_DepthStateDisable );//深度無効ステート
 
-	m_ImmediateContext->OMSetDepthStencilState( m_DepthStateEnable, NULL );
+	 m_ImmediateContext->OMSetDepthStencilState( m_DepthStateEnable, NULL );
 
 
 	// サンプラーステート設定

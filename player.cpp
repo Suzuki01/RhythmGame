@@ -11,37 +11,48 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "scene.h"
+#include "model_animation.h"
 
-
+int fr;
+float blend;
 void Player::Init() {
 	m_Transform.Position = XMFLOAT3(0, 1.0f, 0);
-	m_Transform.Scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	m_Transform.Scale = XMFLOAT3(0.01f, 0.01f, 0.01f);
 	m_Transform.Rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
-	m_Model = new CModel();
-	m_Model->Load("asset/miku_01.obj");
-//	m_Model->Load(CRenderer::GetDevice(), CRenderer::GetDeviceContext(), "asset/model/miku_01.obj");
-	
+	m_pModel = new ModelAnimation();
+	m_pModel->Load("asset/model/human_walk.fbx");	
+//	m_pModel->Load("asset/model/testex.fbx");	
+//	m_pModel->Load("asset/model/mixamo/SambaDancing2.fbx");	
+	fr = 0;
+	blend = 0;
 }
 
 void Player::Update() {
 	//上
 	if (Input::Keyboard_IsPress('W')) {
 		m_Transform.Position.z += 0.1f;
+		m_pModel->SetAnimation(0);
+		fr++;
 	}
 	//下
 	if (Input::Keyboard_IsPress('S')) {
 		m_Transform.Position.z -= 0.1f;
+		m_pModel->SetAnimation(0);
+		fr++;
 	}
 	//左
 	if (Input::Keyboard_IsPress('A')) {
 		m_Transform.Position.x -= 0.1f;
+		m_pModel->SetAnimation(0);
+		fr++;
 	}
 	//右
 	if (Input::Keyboard_IsPress('D')) {
 		m_Transform.Position.x += 0.1f;
+		m_pModel->SetAnimation(0);
+		fr++;
 	}
-
 	if (Input::Keyboard_IsTrigger('P')) {
 		Scene* scene = CManager::GetScene();
 		Bullet* bullet = scene->AddGameObject<Bullet>(5);
@@ -53,14 +64,28 @@ void Player::Update() {
 		Enemy* enemy = scene->AddGameObject<Enemy>(3);
 		enemy->SetPosition(m_Transform.Position);
 	}
+	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
+		//jump
+		fr = 0;
+		m_pModel->SetAnimation(1);
+	}
+	if (m_pModel->GetAnimationID() == 1) {
+		Jump();
+	}
+	m_pModel->Update(m_pModel->GetAnimationID(),1,blend, fr);
+	matrix = XMMatrixScaling(1, 1, 1);
+	XMVECTOR vec = {0.0f,1.0f,0.0f };
+	matrix *= XMMatrixRotationAxis(vec,3.0f);
+	matrix *= XMMatrixTranslation(m_Transform.Position.x, m_Transform.Position.y, m_Transform.Position.z);
 	MeshField* field = CManager::GetScene()->GetComponent<MeshField>(1);
-	m_Transform.Position.y = field->GetHeight(m_Transform.Position) + 1.0f;
-	
+//	m_Transform.Position.y = field->GetHeight(m_Transform.Position) + 1.0f;
+//	fr++;
+	blend += 0.1f;
 }
 float t = 0;
 void Player::Draw() {
 	// マトリクス設定
-	m_Transform.SetWorldMatrix();
+//	m_Transform.SetWorldMatrix();
 	std::vector<Enemy*> enemys;
 	enemys = CManager::GetScene()->GetComponents<Enemy>(3);
 	if (t < 1) {
@@ -75,11 +100,26 @@ void Player::Draw() {
 //	m_Transform.Quaternion.EulerToQuaternion(m_Transform.Rotation.x, m_Transform.Rotation.y, m_Transform.Rotation.z);
 //	m_Transform.SetWorldQuaternionMatrix();
 	//m_Model->Draw();
-	m_Model->Draw();
+	m_pModel->Draw(matrix);
 	//m_Model->Draw(CRenderer::GetDeviceContext());
 }
 
 void Player::UnInit() {
-	m_Model->Unload();
-	delete m_Model;
+	m_pModel->Unload();
+	delete m_pModel;
+}
+
+void Player::Jump() {
+	if (fr < 50) {
+		m_Transform.Position.y += 0.2;
+	}
+	else if(fr < 100) {
+		m_Transform.Position.y -= 0.2;
+	}
+
+	if (fr > 120) {
+		m_pModel->SetAnimation(0);
+		fr = 0;
+	}
+	fr++;
 }

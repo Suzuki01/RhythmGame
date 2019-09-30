@@ -9,13 +9,14 @@ bool move;
 
 void CCamera::Init()
 {
-
 	m_Transform.Position = XMFLOAT3( 0.0f, 12.0f, -15.0f );
 	m_Transform.Rotation = XMFLOAT3( 0.5f, 0.0f, 0.0f );
 	m_Viewport.left = 0;
 	m_Viewport.top = 0;
 	m_Viewport.right = SCREEN_WIDTH;
 	m_Viewport.bottom = SCREEN_HEIGHT;
+
+	rollTime = 0;
 }
 
 
@@ -48,12 +49,31 @@ void CCamera::Update()
 	if (Input::Keyboard_IsPress('F')) {
 		m_Transform.Position.y -= 0.1f;
 	}
+	if (Input::Keyboard_IsPress('J')) {
+		m_Transform.Rotation.y += 0.05f;
+	}
 	if (Input::Keyboard_IsPress('L')) {
-		m_Transform.Rotation.y += 0.01f;
+		m_Transform.Rotation.y -= 0.05f;
+	}
+	if (Input::Keyboard_IsPress('I')) {
+		m_Transform.Rotation.x -= 0.05f;
 	}
 	if (Input::Keyboard_IsPress('K')) {
-		m_Transform.Rotation.y -= 0.01f;
+		m_Transform.Rotation.x += 0.05f;
 	}
+	if (Input::Keyboard_IsPress('Y')) {
+		m_Transform.Rotation.z += 0.05f;
+	}
+	if (Input::Keyboard_IsPress('H')) {
+		m_Transform.Rotation.z -= 0.05f;
+	}
+
+	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
+//		isRoll = true;
+	}
+	if(isRoll)
+		Roll(2, true, false, false);
+	m_Transform.Quaternion.EulerToQuaternion(m_Transform.Rotation.x, m_Transform.Rotation.y, m_Transform.Rotation.z);
 }
 
 
@@ -76,7 +96,8 @@ void CCamera::Draw()
 	CRenderer::GetDeviceContext()->RSSetViewports(1, &dxViewport);
 
 	// ビューマトリクス設定
-	m_InvViewMatrix = XMMatrixRotationRollPitchYaw(m_Transform.Rotation.x, m_Transform.Rotation.y, m_Transform.Rotation.z);
+	m_InvViewMatrix = m_Transform.Quaternion.QuaternionToRotationMatrix();
+//	m_InvViewMatrix = XMMatrixRotationRollPitchYaw(m_Transform.Rotation.x, m_Transform.Rotation.y, m_Transform.Rotation.z);
 	m_InvViewMatrix *= XMMatrixTranslation(m_Transform.Position.x, m_Transform.Position.y, m_Transform.Position.z);
 
 	XMVECTOR det;
@@ -92,4 +113,24 @@ void CCamera::Draw()
 
 XMMATRIX CCamera::GetViewMatrix() {
 	return m_ViewMatrix;
+}
+
+void CCamera::Roll(float time,bool x,bool y,bool z) {
+	rotationAmount = 6.5;
+	if (time > rollTime) {
+		if (x) {
+			m_Transform.Rotation.x += rotationAmount;
+		}
+		else if (y) {
+			m_Transform.Rotation.y += rotationAmount;
+		}
+		else if (z) {
+			m_Transform.Rotation.z += rotationAmount;
+		}
+		rollTime++;
+	}
+	else {
+		rollTime = 0;
+		isRoll = false;
+	}
 }

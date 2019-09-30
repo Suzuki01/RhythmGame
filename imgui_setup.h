@@ -7,6 +7,8 @@ public :
 	static void Update();
 	static void Draw();
 	static void UnInit();
+private:
+	static bool m_isChange;
 };
 
 #endif // !IMGUI_SETUP_H_

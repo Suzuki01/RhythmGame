@@ -116,18 +116,32 @@ void Sound::Start() {
 	waveOutWrite(m_hwo, &m_wh, sizeof(WAVEHDR));
 }
 
+void Sound::Stop()
+{
+	waveOutPause(m_hwo);
+}
+
+void Sound::Restart()
+{
+	waveOutRestart(m_hwo);
+}
+
+//現在の演奏時間取得
 float Sound::GetTime() {
 	return m_dwSecond;
 }
 
+//現在のサンプリング数取得
 int Sound::GetSamplingNumber() {
 	return (int)m_mmt.u.cb;
 }
 
+//1秒間のサンプリング数取得
 DWORD Sound::GetCurrentSamplingPerSec() {
 	return m_wf.nSamplesPerSec;
 }
 
+//現在の拍数取得
 float Sound::GetCurrentBeats() {
 	return (float)m_mmt.u.cb / ((float)m_wf.nSamplesPerSec * 60.0f / (float)m_bpm);
 }
@@ -139,4 +153,35 @@ void Sound::Reset() {
 
 int Sound::GetSongSize() {
 	return m_playLength;
+}
+
+void Sound::SetTime() {
+	m_mmt.u.cb = (DWORD)20000;
+	m_wh.dwBytesRecorded = 20;
+	waveOutWrite(m_hwo, &m_wh, sizeof(WAVEHDR));
+}
+
+
+void Sound::SetPosition() {
+/*	if (lpmmt->wType != TIME_BYTES)
+		return MMSYSERR_INVALFLAG;
+		*/
+
+
+	waveOutReset(m_hwo);
+	waveOutUnprepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
+
+
+	m_wh.lpData = (LPSTR)m_lpWaveData + GetCurrentSamplingPerSec() * 5;
+	m_wh.dwBufferLength = m_wh.dwBufferLength - GetCurrentSamplingPerSec() * 5;
+	m_wh.dwFlags = 0;
+
+	waveOutPrepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
+	waveOutWrite(m_hwo, &m_wh, sizeof(WAVEHDR));
+
+//	return MMSYSERR_NOERROR;
+}
+
+int Sound::GetBpm() {
+	return m_bpm;
 }

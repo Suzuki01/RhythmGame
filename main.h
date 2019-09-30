@@ -25,7 +25,7 @@
 
 using namespace DirectX;
 
-#pragma comment(lib, "assimp.lib")
+#pragma comment(lib, "assimp-vc142-mt.lib")
 #pragma comment (lib, "d3d11.lib")
 #pragma comment (lib, "winmm.lib")
 #pragma comment (lib, "xaudio2.lib")
