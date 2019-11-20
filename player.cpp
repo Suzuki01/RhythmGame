@@ -15,12 +15,13 @@
 
 int fr;
 float blend;
-void Player::Init() {
-	m_Transform.Position = XMFLOAT3(0, 1.0f, 0);
-	m_Transform.Scale = XMFLOAT3(0.01f, 0.01f, 0.01f);
+void Player::Init(XMFLOAT3 pos) {
+	m_Transform.Position = pos;
+	m_Transform.Scale = XMFLOAT3(0.0001f, 0.0001f, 0.0001f);
 	m_Transform.Rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	m_pModel = new ModelAnimation();
+//	m_pModel->Load("asset/model/ball.fbx");	
 	m_pModel->Load("asset/model/human_walk.fbx");	
 //	m_pModel->Load("asset/model/testex.fbx");	
 //	m_pModel->Load("asset/model/mixamo/SambaDancing2.fbx");	

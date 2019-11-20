@@ -143,7 +143,6 @@ void CRenderer::Init()
 	ID3D11BlendState* blendState = NULL;
 	m_D3DDevice->CreateBlendState( &blendDesc, &blendState );
 	m_ImmediateContext->OMSetBlendState( blendState, blendFactor, 0xffffffff );
-
 	// 深度ステンシルステート設定
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory( &depthStencilDesc, sizeof( depthStencilDesc ) );
@@ -269,8 +268,8 @@ void CRenderer::Init()
 
 	// ライト初期化
 	LIGHT light;
-	light.Direction = XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f);
-	light.Diffuse = COLOR(0.9f, 0.9f, 0.9f, 1.0f);
+	light.Direction = XMFLOAT4(0.0f, -1.0f, 1.0f, 0.0f);
+	light.Diffuse = COLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	light.Ambient = COLOR(0.1f, 0.1f, 0.1f, 1.0f);
 	SetLight(light);
 
@@ -428,3 +427,15 @@ void CRenderer::DrawIndexed( unsigned int IndexCount, unsigned int StartIndexLoc
 
 }
 
+void CRenderer::SetZBuffer(bool isSet){
+	if (isSet) {
+		m_ImmediateContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	} else {
+		m_ImmediateContext->OMSetRenderTargets(
+			1,                                    // ターゲット
+			&m_RenderTargetView,    // ビュー
+			NULL()            // 深度バッファなし
+		);
+
+	}
+}

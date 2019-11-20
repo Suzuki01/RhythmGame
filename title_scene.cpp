@@ -32,14 +32,20 @@ void TitleScene::Update()
 
 	if (Input::Keyboard_IsTrigger(VK_SPACE)) {
 		CManager::SetScene<SongSelectionScene>();
+		Notes::isEditorMode = false;
 	}
 	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
 		CManager::SetScene<TestScene>();
 	}
 	if (Input::Keyboard_IsTrigger('E')) {
 		CManager::SetScene<EditorScene>();
+		Notes::isEditorMode = true;
 	}
 	if (Input::Keyboard_IsTrigger(VK_MBUTTON)) {
 		CManager::SetScene<EditorScene>();
 	}
+}
+
+void TitleScene::Draw() {
+	Scene::Draw();
 }

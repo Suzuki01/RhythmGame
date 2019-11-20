@@ -157,12 +157,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="audio_clip.cpp" />
+    <ClCompile Include="ball.cpp" />
     <ClCompile Include="bill_board.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="data_manager.cpp" />
     <ClCompile Include="editor_scene.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="field.cpp" />
+    <ClCompile Include="font.cpp" />
     <ClCompile Include="game_scene.cpp" />
     <ClCompile Include="imgui.cpp" />
     <ClCompile Include="imgui_draw.cpp" />
@@ -186,6 +189,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result_scene.cpp" />
     <ClCompile Include="score.cpp" />
+    <ClCompile Include="select_line.cpp" />
     <ClCompile Include="sky_dome.cpp" />
     <ClCompile Include="song_selection_scene.cpp" />
     <ClCompile Include="sound.cpp" />
@@ -201,12 +205,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audio_clip.h" />
+    <ClInclude Include="ball.h" />
     <ClInclude Include="bill_board.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
+    <ClInclude Include="cereal\access.hpp" />
+    <ClInclude Include="cereal\cereal.hpp" />
+    <ClInclude Include="data_manager.h" />
     <ClInclude Include="editor_scene.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="field.h" />
+    <ClInclude Include="font.h" />
     <ClInclude Include="game_object.h" />
     <ClInclude Include="game_scene.h" />
     <ClInclude Include="imconfig.h" />
@@ -236,6 +245,7 @@
     <ClInclude Include="result_scene.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="score.h" />
+    <ClInclude Include="select_line.h" />
     <ClInclude Include="sky_dome.h" />
     <ClInclude Include="song_selection_scene.h" />
     <ClInclude Include="sound.h" />
@@ -258,6 +268,10 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.1</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="vertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -266,6 +280,10 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.1</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.1</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

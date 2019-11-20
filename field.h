@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FIELD_H_
+#define FIELD_H_
 
 class Field : public GameObject {
 private:
@@ -11,3 +12,5 @@ public:
 	void Draw();
 
 };
+
+#endif

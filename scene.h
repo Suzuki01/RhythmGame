@@ -98,6 +98,7 @@ public:
 		SkyDomeLayer,
 		JusticeFieldLayer,
 		PlayerLayer,
+		CursorLayer,
 		BillboardLayer,
 		PolygonLayer,
 	};

@@ -28,7 +28,7 @@ void NotesObject::Update()
 	
 	if (Sound::GetCurrentBeats() <= Notes::GetCurrentNotesTime(0) - 10 ) {
 		Create();
-		Notes::Create(0);
+	//	Notes::Create(0);
 	}
 	int i = 0;
 	for (CModel* object : m_pModel) {

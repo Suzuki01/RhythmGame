@@ -75,8 +75,8 @@ void SongSelectionScene::UnInit()
 
 void SongSelectionScene::Update()
 {
-	Scene::Update();
 
+	Scene::Update();
 	switch (m_Phase) {
 	case PHASE_INDEX_START:
 		if (Input::Keyboard_IsTrigger(VK_SPACE))
@@ -143,7 +143,6 @@ void SongSelectionScene::Update()
 
 void SongSelectionScene::Draw()
 {
-	Scene::Draw();
 	switch (m_Phase) {
 	case PHASE_INDEX_START:
 		g_polygon->Draw();
@@ -154,6 +153,7 @@ void SongSelectionScene::Draw()
 		for (CPolygon* object : m_pThumbnailPolygon) {
 			object->Draw();
 		}
+		Scene::Draw();	
 		break;
 	case PHASE_INDEX_DECISION:
 		for (CPolygon* object : m_pSelectSongFrame) {

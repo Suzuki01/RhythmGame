@@ -39,7 +39,6 @@ void CManager::Uninit()
 	m_pScene->UnInit();
 	delete m_pScene;
 
-	delete g_Notes;
 	//Input::UnInit(); ‚Ü‚¾ì‚Á‚Ä‚¢‚È‚¢
 	CRenderer::Uninit();
 	TextureManager::Release();

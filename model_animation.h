@@ -1,10 +1,6 @@
 #ifndef MODEL_ANIMATION_H_
 #define MODEL_ANIMATION_H_
 
-#include "main.h"
-#include "renderer.h"
-#include "texture.h"
-#include "texture_manager.h"
 
 struct MESH {
 	ID3D11Buffer* VertexBuffer;

@@ -6,6 +6,7 @@ public:
 	void Init();
 	void UnInit();
 	void Update();
+	void Draw();
 private:
 	CAudioClip* m_SE;
 

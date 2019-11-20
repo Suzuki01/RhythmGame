@@ -13,6 +13,10 @@ private:
 	MeshFieldVertex* pMeshFieldVertex;
 	float m_width;
 	int m_sideMax;
+	//頂点バッファ
+	ID3D11Buffer* m_VertexBuffer = NULL;
+	//インデックスバッファ
+	ID3D11Buffer* m_IndexBuffer = NULL;
 
 public:
 	void Init(float width, float height, int Max, int sideMax, int lengthMax);

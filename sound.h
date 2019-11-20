@@ -1,8 +1,14 @@
 #ifndef SOUND_H_
 #define SOUND_H_
 
+typedef struct _WOSP {
+	WORD nBlockAlign;
+	DWORD nAvgBytesPerSec;
+}WOSP;
+
 class Sound {
 public:
+	static WAVEHDR m_whdr;
 	static LPBYTE       m_lpWaveData;
 	static HWAVEOUT     m_hwo;
 	static WAVEHDR      m_wh;
@@ -27,8 +33,16 @@ public:
 	static void Reset();
 	static int GetSongSize();
 	static void SetTime();
-	static void SetPosition();
+	static void SetPosition(DWORD samples);
 	static int GetBpm();
+	static int WaveOutSetPosition(HWAVEOUT hwo, LPWAVEHDR pwh, LPMMTIME pmmt, WOSP* wosp);
+	static void SetPositionUnprepareHeader(HWAVEOUT hwo);
+	static float GetEditorCurrenntBeats();
+	static WOSP m_Wosp;
+	static DWORD m_LastSamples;  
+	static DWORD m_Samples;
+	static bool isPlay;
+private:
 };
 
 #endif //!SOUND_H_

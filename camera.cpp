@@ -9,7 +9,7 @@ bool move;
 
 void CCamera::Init()
 {
-	m_Transform.Position = XMFLOAT3( 0.0f, 12.0f, -15.0f );
+	m_Transform.Position = XMFLOAT3( 0.0f, 12.0f, -20.0f );
 	m_Transform.Rotation = XMFLOAT3( 0.5f, 0.0f, 0.0f );
 	m_Viewport.left = 0;
 	m_Viewport.top = 0;
@@ -27,7 +27,7 @@ void CCamera::Uninit()
 
 void CCamera::Update()
 {
-	//上
+/*	//上
 	if (Input::Keyboard_IsPress('W')) {
 		m_Transform.Position.z += 0.1f;
 	}
@@ -67,12 +67,12 @@ void CCamera::Update()
 	if (Input::Keyboard_IsPress('H')) {
 		m_Transform.Rotation.z -= 0.05f;
 	}
-
+	
 	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
 //		isRoll = true;
 	}
 	if(isRoll)
-		Roll(2, true, false, false);
+		Roll(2, true, false, false);*/
 	m_Transform.Quaternion.EulerToQuaternion(m_Transform.Rotation.x, m_Transform.Rotation.y, m_Transform.Rotation.z);
 }
 
@@ -80,9 +80,6 @@ void CCamera::Update()
 
 void CCamera::Draw()
 {
-
-	XMMATRIX	m_ProjectionMatrix;
-	XMMATRIX	m_InvViewMatrix;
 
 	// ビューポート設定
 	D3D11_VIEWPORT dxViewport;
@@ -115,6 +112,15 @@ XMMATRIX CCamera::GetViewMatrix() {
 	return m_ViewMatrix;
 }
 
+XMMATRIX CCamera::GetProjectMatrix()
+{
+	return m_ProjectionMatrix;
+}
+
+XMMATRIX CCamera::GetWorldMatrix() {
+	return m_InvViewMatrix;
+}
+
 void CCamera::Roll(float time,bool x,bool y,bool z) {
 	rotationAmount = 6.5;
 	if (time > rollTime) {
@@ -133,4 +139,20 @@ void CCamera::Roll(float time,bool x,bool y,bool z) {
 		rollTime = 0;
 		isRoll = false;
 	}
+}
+
+bool CCamera::GetVisibility(XMFLOAT3 position)
+{
+	XMVECTOR worldPos, viewPos, projPos;
+	worldPos = {0};
+	XMFLOAT3 projPosF;
+	worldPos = XMLoadFloat3(&position);
+	viewPos = XMVector3TransformCoord(worldPos,m_ViewMatrix);
+	projPos = XMVector3TransformCoord(viewPos,m_ProjectionMatrix);
+	XMStoreFloat3(&projPosF,projPos);
+
+	if (-1.0f < projPosF.x && projPosF.x < 1.0f && -1.0f < projPosF.y && projPosF.y < 1.0f && 0.0f < projPosF.z && projPosF.z < 1.0f) {
+		return true;
+	}
+	return false;
 }

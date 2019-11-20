@@ -1,3 +1,7 @@
+#include "main.h"
+#include "renderer.h"
+#include "texture.h"
+#include "texture_manager.h"
 #include "model_animation.h"
 
 

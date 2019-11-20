@@ -57,6 +57,7 @@ void main(in  float4 inPosition		: POSITION0,
 	in  float4 inNormal : NORMAL0,
 	in  float4 inDiffuse : COLOR0,
 	in  float2 inTexCoord : TEXCOORD0,
+	in uint inInstanceID : SV_InstanceID,
 
 	out float4 outPosition : SV_POSITION,
 	out float4 outNormal : NORMAL0,
@@ -66,6 +67,9 @@ void main(in  float4 inPosition		: POSITION0,
 	matrix wvp;
 	wvp = mul(World, View);
 	wvp = mul(wvp, Projection);
+
+	inPosition.x += inInstanceID % 100;
+	inPosition.z += inInstanceID / 100;
 
 	outPosition = mul(inPosition, wvp);
 	outNormal = inNormal;

@@ -52,11 +52,13 @@ void CPolygon::UnInit() {
 void CPolygon::Draw() {
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
+	CRenderer::SetZBuffer(false);
 	CRenderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset); //頂点バッファ設定　一度に複数の頂点を設定できる
 	CRenderer::SetTexture(m_Texture);    //テクスチャ設定
 	CRenderer::SetWorldViewProjection2D(m_Transform.Position); //2Dマトリクス設定
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->Draw(4, 0);//ポリゴン描画
+	CRenderer::SetZBuffer(true);
 }
 
 void CPolygon::Draw(char* fileName)
@@ -64,11 +66,13 @@ void CPolygon::Draw(char* fileName)
 	m_Texture = TextureManager::Load(fileName);
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
+	CRenderer::SetZBuffer(false);
 	CRenderer::GetDeviceContext()->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset); //頂点バッファ設定　一度に複数の頂点を設定できる
 	CRenderer::SetTexture(m_Texture);    //テクスチャ設定
 	CRenderer::SetWorldViewProjection2D(m_Transform.Position); //2Dマトリクス設定
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->Draw(4, 0);//ポリゴン描画
+	CRenderer::SetZBuffer(true);
 }
 
 void CPolygon::Update() {

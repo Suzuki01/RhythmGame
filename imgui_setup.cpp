@@ -6,12 +6,15 @@
 #include "score.h"
 #include "scene.h"
 #include "test_scene.h"
+#include "audio_clip.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_setup.h"
+#include "notes.h"
 
 bool ImguiSetup::m_isChange = false;
+float ImguiSetup::m_beats = 0;
 
 void ImguiSetup::Init() {
 	IMGUI_CHECKVERSION();
@@ -61,10 +64,20 @@ void ImguiSetup::Draw() {
 	ImGui::Text("Score = %f",Score::GetScore());
 	ImGui::Checkbox("Transition Test Scene",&m_isChange);
 
+	ImGui::SameLine();
+	ImGui::SliderFloat("Start Beats",&m_beats,0,Sound::GetSongSize());
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+	ImGui::BeginChild("Scrolling");
+//	for(int n = 0; n < Notes::)
+	ImGui::EndChild();
 	ImGui::End();
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
+}
+
+float ImguiSetup::GetStartBeats() {
+	return m_beats;
 }

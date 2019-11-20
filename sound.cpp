@@ -4,21 +4,27 @@
 LPBYTE       Sound::m_lpWaveData = NULL;
 HWAVEOUT     Sound::m_hwo = NULL;
 WAVEHDR      Sound::m_wh = { 0 };
+WAVEHDR		 Sound::m_whdr = { 0 };
 WAVEFORMATEX Sound::m_wf = { 0 };
 float  Sound::m_dwSecond = 0;
 float time = 0;
 MMTIME Sound::m_mmt = { 0 };
 int Sound::m_bpm = 0;
 int Sound::m_playLength = 0;
+WOSP Sound::m_Wosp;
+DWORD Sound::m_LastSamples = 0;
+DWORD Sound::m_Samples = 0;
+bool Sound::isPlay = false;
 
 typedef struct {
-	char* song;
+	const char* song;
 	int bpm;
 }SongData;
 
 SongData data[] = {
-	{{"asset/sound/kurumiwari_ningyou.wav"},144 },
-	{{"asset/sound/tengokuto_jigoku.wav"},83},
+	//	{{"asset/sound/kurumiwari_ningyou.wav"},144 },
+		{{"asset/sound/aisi.wav"},100 },
+		{{"asset/sound/tengokuto_jigoku.wav"},83},
 };
 
 
@@ -35,22 +41,27 @@ BOOL Sound::Init(int id) {
 	//waveOutSetVolume(m_hwo,900);
 	m_wh.lpData = (LPSTR)m_lpWaveData;
 	m_wh.dwBufferLength = dwDataSize;
-	m_wh.dwFlags = 0;
+	m_wh.dwFlags = WHDR_BEGINLOOP | WHDR_ENDLOOP;
+	m_wh.dwLoops = 1;
 	waveOutPrepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
 
 	m_playLength = m_wh.dwBufferLength / m_wf.nBlockAlign;
+	m_Wosp.nBlockAlign = Sound::m_wf.nBlockAlign;
+	m_Wosp.nAvgBytesPerSec = Sound::m_wf.nAvgBytesPerSec;
+//	Start();
 }
 
 void Sound::UnInit() {
 	if (m_hwo != NULL) {
 		waveOutReset(m_hwo);
+		Sound::SetPositionUnprepareHeader(m_hwo);
 		waveOutUnprepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
 		waveOutClose(m_hwo);
 	}
 
 	if (m_lpWaveData != NULL)
 		HeapFree(GetProcessHeap(), 0, m_lpWaveData);
- }
+}
 
 void Sound::Update() {
 
@@ -114,16 +125,19 @@ BOOL Sound::ReadWaveFile(LPTSTR lpszFileName, LPWAVEFORMATEX lpwf, LPBYTE* lplpD
 
 void Sound::Start() {
 	waveOutWrite(m_hwo, &m_wh, sizeof(WAVEHDR));
+	isPlay = true;
 }
 
 void Sound::Stop()
 {
 	waveOutPause(m_hwo);
+	isPlay = false;
 }
 
 void Sound::Restart()
 {
 	waveOutRestart(m_hwo);
+	isPlay = true; 
 }
 
 //現在の演奏時間取得
@@ -133,7 +147,7 @@ float Sound::GetTime() {
 
 //現在のサンプリング数取得
 int Sound::GetSamplingNumber() {
-	return (int)m_mmt.u.cb;
+	return (int)m_mmt.u.cb + m_Samples;
 }
 
 //1秒間のサンプリング数取得
@@ -143,7 +157,11 @@ DWORD Sound::GetCurrentSamplingPerSec() {
 
 //現在の拍数取得
 float Sound::GetCurrentBeats() {
-	return (float)m_mmt.u.cb / ((float)m_wf.nSamplesPerSec * 60.0f / (float)m_bpm);
+	return ((float)m_mmt.u.cb + (float)m_Samples) / ((float)m_wf.nSamplesPerSec * 60.0f / (float)m_bpm);
+}
+
+float Sound::GetEditorCurrenntBeats() {
+	return ((float)m_mmt.u.cb + (float)m_Samples) / ((float)m_wf.nSamplesPerSec * 60.0f / (float)m_bpm);
 }
 
 void Sound::Reset() {
@@ -162,26 +180,69 @@ void Sound::SetTime() {
 }
 
 
-void Sound::SetPosition() {
-/*	if (lpmmt->wType != TIME_BYTES)
-		return MMSYSERR_INVALFLAG;
-		*/
-
-
-	waveOutReset(m_hwo);
-	waveOutUnprepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
-
-
-	m_wh.lpData = (LPSTR)m_lpWaveData + GetCurrentSamplingPerSec() * 5;
-	m_wh.dwBufferLength = m_wh.dwBufferLength - GetCurrentSamplingPerSec() * 5;
-	m_wh.dwFlags = 0;
-
-	waveOutPrepareHeader(m_hwo, &m_wh, sizeof(WAVEHDR));
-	waveOutWrite(m_hwo, &m_wh, sizeof(WAVEHDR));
-
-//	return MMSYSERR_NOERROR;
+void Sound::SetPosition(DWORD samples) {
+	if (isPlay)
+		return;
+//	Sound::m_mmt.wType = TIME_MS;
+    m_Samples += samples - m_LastSamples;
+	Sound::m_mmt.u.cb = m_Samples;
+/*	if(samples > m_LastSamples)
+		Sound::m_mmt.u.cb += samples;
+	else {
+		Sound::m_mmt.u.cb -= samples;
+	}*/
+	Sound::WaveOutSetPosition(Sound::m_hwo, &Sound::m_wh, &Sound::m_mmt, &m_Wosp);
+	m_LastSamples = m_Samples;
+	Stop();
 }
 
 int Sound::GetBpm() {
 	return m_bpm;
+}
+
+int Sound::WaveOutSetPosition(HWAVEOUT hwo, LPWAVEHDR pwh, LPMMTIME pmmt, WOSP* wosp)
+{
+	DWORD cb;
+	switch (pmmt->wType) {
+	case TIME_BYTES:
+		cb = pmmt->u.cb;
+		break;
+	case TIME_SAMPLES:
+		cb = pmmt->u.sample * wosp->nBlockAlign;
+		break;
+	case TIME_MS:
+		cb = pmmt->u.ms * wosp->nAvgBytesPerSec / 1000;
+		break;
+	default:
+		return -1;
+	}
+	if (cb % wosp->nBlockAlign) {
+		if ((cb % wosp->nBlockAlign) <= (wosp->nBlockAlign / 2)) {
+			cb -= (cb % wosp->nBlockAlign);
+		}
+		else {
+			cb += (wosp->nBlockAlign - (cb % wosp->nBlockAlign));
+		}
+	}
+	if (cb < 0 || cb >= pwh->dwBufferLength) return -2;
+
+	waveOutReset(hwo);
+	SetPositionUnprepareHeader(hwo);
+
+	ZeroMemory(&m_whdr, sizeof(WAVEHDR));
+	m_whdr.lpData = pwh->lpData + cb;
+	m_whdr.dwBufferLength = pwh->dwBufferLength - cb;
+	m_whdr.dwFlags = WHDR_BEGINLOOP | WHDR_ENDLOOP;
+	m_whdr.dwLoops = 1;
+
+	waveOutPrepareHeader(hwo, &m_whdr, sizeof(WAVEHDR));
+	waveOutWrite(hwo, &m_whdr, sizeof(WAVEHDR));
+	return 0;
+}
+
+void Sound::SetPositionUnprepareHeader(HWAVEOUT hwo)
+{
+	if (m_whdr.dwFlags & WHDR_PREPARED) {
+		waveOutUnprepareHeader(hwo, &m_whdr, sizeof(WAVEHDR));
+	}
 }

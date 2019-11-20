@@ -10,6 +10,7 @@ public:
 	void Draw();
 	void Update();
 	void UnInit();
+	void SetTexture(char* fileName);
 	BillBoard();
 	virtual ~BillBoard();
 };

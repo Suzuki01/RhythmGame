@@ -15,6 +15,11 @@ public:
 	void Update();
 	void Draw();
 	XMMATRIX GetViewMatrix();
-	XMMATRIX	m_ViewMatrix;
+	XMMATRIX GetProjectMatrix();
+	XMMATRIX GetWorldMatrix();
+	XMMATRIX m_ViewMatrix;
+	XMMATRIX m_ProjectionMatrix;
+	XMMATRIX m_InvViewMatrix;
 	void Roll(float time, bool x, bool y, bool z);
+	bool GetVisibility(XMFLOAT3 position);
 };

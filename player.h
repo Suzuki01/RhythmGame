@@ -8,7 +8,7 @@ public:
 	ModelAnimation* m_pModel;
 	XMMATRIX matrix;
 	//‰eƒNƒ‰ƒX‚ª“ü‚é
-	void Init();
+	void Init(XMFLOAT3 pos);
 	void Update();
 	void Draw();
 	void UnInit();

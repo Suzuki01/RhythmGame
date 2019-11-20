@@ -1,15 +1,15 @@
 
 #include "main.h"
+#include "imgui_setup.h"
 #include "audio_clip.h"
-
-
 
 IXAudio2*				CAudioClip::m_Xaudio;
 IXAudio2MasteringVoice*	CAudioClip::m_MasteringVoice;
-
+XAUDIO2_VOICE_STATE		CAudioClip::m_State;
 
 void CAudioClip::Init(void)
 {
+	
 	// COMèâä˙âª
 	CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
@@ -107,7 +107,13 @@ bool CAudioClip::Load(const char *FileName)
 	return true;
 }
 
+void CAudioClip::Update() {
+	for (int j = 0; j < SOUND_SOURCE_MAX; j++) {
+		m_SourceVoice[0]->GetState(&m_State);
+	}
 
+}
+ 
 void CAudioClip::Unload()
 {
 
@@ -156,9 +162,9 @@ void CAudioClip::Play( bool Loop )
 			memset(&bufinfo,0x00,sizeof(bufinfo));
 			bufinfo.AudioBytes = m_Length;
 			bufinfo.pAudioData = m_SoundData;
-			bufinfo.PlayBegin = 0;
+			bufinfo.PlayBegin = (UINT32)ImguiSetup::GetStartBeats();
 			bufinfo.PlayLength = m_PlayLength;
-
+			
 			// ÉãÅ[Évê›íË
 			if( Loop )
 			{
@@ -168,17 +174,15 @@ void CAudioClip::Play( bool Loop )
 			}
 
 			m_SourceVoice[j]->SubmitSourceBuffer( &bufinfo, NULL );
-
-
+			
 			// çƒê∂
 			m_SourceVoice[j]->Start();
-
+			m_SourceVoice[j]->GetState(&state);
 			break;
 		}
 	}
 
 }
-
 
 
 void CAudioClip::Stop()
@@ -190,3 +194,6 @@ void CAudioClip::Stop()
 }
 
 
+UINT64 CAudioClip::GetSamplingNumber() {
+	return m_State.SamplesPlayed;
+}

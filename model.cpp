@@ -50,6 +50,11 @@ void CModel::Draw()
 
 		// ポリゴン描画
  		CRenderer::DrawIndexed( m_SubsetArray[i].IndexNum, m_SubsetArray[i].StartIndex, 0 );
+
+		//ジオメトリインスタンシング処理
+//		CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//		CRenderer::GetDeviceContext()->DrawIndexedInstanced(m_SubsetArray[i].IndexNum,20000,m_SubsetArray[i].StartIndex,0,0); //ジオメトリインスタンシングをするための関数、10000はインスタンス数
+
 	}
 
 }

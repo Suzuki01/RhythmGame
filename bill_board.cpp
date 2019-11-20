@@ -62,6 +62,7 @@ void BillBoard::UnInit() {
 }
 
 void BillBoard::Draw() {
+	CRenderer::SetZBuffer(false);
 	// テクスチャ設定
 	CRenderer::SetTexture(m_Texture);
 	// 頂点バッファ設定
@@ -70,11 +71,15 @@ void BillBoard::Draw() {
 	m_Transform.SetBillBoardWorldMatrix();
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->Draw(4, 0);//ポリゴン描画
-
+	CRenderer::SetZBuffer(true);
 }
 
 void BillBoard::Update()
 {
+}
+
+void BillBoard::SetTexture(char* fileName) {
+	m_Texture = TextureManager::Load(fileName);
 }
 
 /*
