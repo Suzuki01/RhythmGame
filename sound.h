@@ -42,6 +42,7 @@ public:
 	static DWORD m_LastSamples;  
 	static DWORD m_Samples;
 	static bool isPlay;
+	static void ImguiSoudData();
 private:
 };
 

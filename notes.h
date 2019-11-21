@@ -20,9 +20,9 @@ struct Note{
 	float time;
 	int rane;
 	bool isCreate;
-/*	bool operator<(const Note& n{
-		return n< n.time;
-	}*/
+	bool operator<(const Note& n){
+		return time < n.time;
+	}
 	Note(float time, int rane, bool isCreate) : time(time),rane(rane),isCreate(isCreate){};
 //	~Note() { delete m_pModel; };
 };
@@ -44,7 +44,7 @@ private:
 	static int m_createLeadNoteNumber[];
 	static std::list<Note*> m_Notes;
 	static JudgmentImage judgementImage[JUDGMENT_IMAGE_MAX];
-	static int Judgement(int rane);
+	static void Judgement(int rane);
 	static void Perfect(int rane);
 	static void Attack(int rane);
 	static void Miss(int rane);

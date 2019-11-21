@@ -8,8 +8,8 @@
 #include "select_line.h"
 #include "audio_clip.h"
 #include "imgui_setup.h"
+#include "title_scene.h"
 #include "editor_scene.h"
-#include "ball.h"
 
 float EditorScene::m_CurrentBeats;
 float EditorScene::m_CurrentPosition;
@@ -20,13 +20,13 @@ void EditorScene::Init()
 	AddGameObject<MeshField>(FieldLayer)->Init(4,16,100,5,20);
 	AddGameObject<CCamera>(CameraLayer)->Init();
 	AddGameObject<SelectLine>(CursorLayer)->Init("asset/white.jpg",XMFLOAT3(-7.0f,0.0f,0.0f),2.0f,1.0f,4,3.7f);
-	Notes::Load(2);
+//	Notes::Load(2);
 	Notes::Init();
-	Sound::Init(0);
+//	Sound::Init(0);
 	m_CurrentPosition = 0;
-	m_CurrentBeats = 0;
-	audio = new CAudioClip;
-	audio->Load("asset/sound/aisi.wav");
+	m_CurrentBeats = 1.0f;
+//	audio = new CAudioClip;
+//	audio->Load("asset/sound/aisi.wav");
 	Sound::Start();
 	Sound::Stop();
 }
@@ -39,9 +39,10 @@ void EditorScene::UnInit()
 void EditorScene::Update()
 {
 	Scene::Update();
-	
 
 	if (Input::Keyboard_IsTrigger('R')) {
+		m_CurrentBeats = Sound::GetEditorCurrenntBeats();
+
 		Sound::Restart();
 		//audio->Play();
 	}
@@ -50,17 +51,19 @@ void EditorScene::Update()
 	}
 	if (Input::Keyboard_IsTrigger(VK_SPACE)) {
 		Notes::Save();
+		Sound::m_Samples = 0;
+		CManager::SetScene<TitleScene>();
 	}
 	if (Input::Keyboard_IsPress('S')) {
-		Sound::Stop();
 		m_CurrentBeats = Sound::GetSamplingNumber();
+		Sound::Stop();
 	}
 	//ã»ÇÃçƒê∂à íuà⁄ìÆ
 	if (Input::Keyboard_IsPress(VK_DOWN)) {
 		if (!Sound::isPlay) {
 			m_CurrentBeats -= Sound::GetCurrentSamplingPerSec() / 60.0f;
-			if (m_CurrentBeats < 0) {
-				m_CurrentBeats = 0;
+			if (m_CurrentBeats < 0.0f) {
+				m_CurrentBeats = 0.0f;
 			}
 		}
 	}
@@ -86,14 +89,13 @@ void EditorScene::Update()
 
 	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
 		if(!Notes::CheckNotes(CManager::GetScene()->GetComponent<SelectLine>(CursorLayer)->m_Billboard->m_Transform.Position,0.2f, CManager::GetScene()->GetComponent<SelectLine>(CursorLayer)->m_RaneNumber))
-			Notes::Create(CManager::GetScene()->GetComponent<SelectLine>(CursorLayer)->m_RaneNumber, CManager::GetScene()->GetComponent<SelectLine>(CursorLayer)->m_Billboard->m_Transform.Position.z + Sound::GetEditorCurrenntBeats());
+			Notes::Create(CManager::GetScene()->GetComponent<SelectLine>(CursorLayer)->m_RaneNumber, CManager::GetScene()->GetComponent<SelectLine>(CursorLayer)->m_Billboard->m_Transform.Position.z + Sound::GetCurrentBeats());
 	}
 
 //	m_CurrentTime = (float)Sound::GetSamplingNumber() * (float)Sound::GetCurrentSamplingPerSec();
 //	m_CurrentPosition = (float)Sound::GetEditorCurrenntBeats();
 
 	Notes::Update();
-	audio->Update();
 }
 
 void EditorScene::Draw()

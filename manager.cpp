@@ -53,8 +53,9 @@ void CManager::Uninit()
 
 void CManager::Update()
 {
-	Input::Update();
 	Sound::Update();
+
+	Input::Update();
 #if defined(_DEBUG) || defined(DEBUG)
 	ImguiSetup::Update();
 #endif

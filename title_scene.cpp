@@ -38,8 +38,9 @@ void TitleScene::Update()
 		CManager::SetScene<TestScene>();
 	}
 	if (Input::Keyboard_IsTrigger('E')) {
-		CManager::SetScene<EditorScene>();
 		Notes::isEditorMode = true;
+		CManager::SetScene<SongSelectionScene>();
+//		CManager::SetScene<EditorScene>();
 	}
 	if (Input::Keyboard_IsTrigger(VK_MBUTTON)) {
 		CManager::SetScene<EditorScene>();

@@ -62,7 +62,7 @@ void Notes::Load(int id) {
 	std::vector<std::string> strvec;
 
 	int cnt = 0;
-	while (std::getline(ifs, line)) {
+ 	while (std::getline(ifs, line)) {
 		strvec = split(line, ',');
 		for (int i = 0; i < strvec.size(); i += strvec.size()) {
 			Note* note = new Note(stof(strvec.at(i)), stof(strvec.at(i + 1)), true);
@@ -106,7 +106,12 @@ void Notes::Init() {
 	isEnd = false;
 	endCount = 0;
 	m_CurrentNoteNum = 0;
-	m_CurrentNoteData = *m_Notes.begin();
+	if(m_Notes.size() == 0){
+		m_CurrentNoteData = 0;
+	}
+	else {
+		m_CurrentNoteData = *m_Notes.begin();
+	}
 	for (int i = 0; i < JUDGMENT_IMAGE_MAX; i++) {
 		judgementImage[i].billBoard = new BillBoard;
 		judgementImage[i].billBoard->Init(classImage[0]);
@@ -177,6 +182,8 @@ void Notes::Draw() {
 			g_Notes2[i]->m_pModel->Draw();
 		}
 	}*/
+	if (m_Notes.size() == 0)
+		return;
 
 	for (int i = 0; i < JUDGMENT_IMAGE_MAX; i++) {
 		if (judgementImage[i].isDisplay) {
@@ -250,11 +257,21 @@ void Notes::Update() {
 		}
 	}
 	*/
+
+	if (m_Notes.size() == 0)
+		return;
+
+
 	for (auto it = m_Notes.begin(); it != m_Notes.end(); ++it) {
 		if ((*it)->rane == NULL)
 			break;
 		else if ((*it)->isCreate) {
-			(*it)->m_pModel->Position.z = 4.0f * (*it)->time - 4.0f * Sound::GetEditorCurrenntBeats();
+			if (Sound::isPlay)
+				(*it)->m_pModel->Position.z = 4.0f * (*it)->time - 4.0f * Sound::GetCurrentBeats();
+			else {
+				(*it)->m_pModel->Position.z = 4.0f * (*it)->time - 4.0f * Sound::GetEditorCurrenntBeats();
+			}
+		
 			(*it)->m_pModel->Update();
 			if ((*it)->m_pModel->Position.z <= -0.6f) {
 				if ((*it)->isCreate) {
@@ -324,7 +341,6 @@ void Notes::Create(int rane, float beatOffset) {
 	note->m_pModel = new CModel();
 	note->m_pModel->Load("asset/miku_01.obj");
 	note->m_pModel->Position = { -6.0f + 4.0f * (rane - 1),0.0f,0.0f };
-
 	m_Notes.push_back(note);
 }
 
@@ -362,25 +378,27 @@ bool Notes::EndCheck()
 	return false;
 }
 
-int Notes::Judgement(int rane) {
+void Notes::Judgement(int rane) {
+	if (isEditorMode)
+		return;
 	float judgeTime = GetCurrentNotesTime(rane) - Sound::GetCurrentBeats();
 	if (rane != m_CurrentNoteData->rane || isEditorMode)
-		return 0;
+		return;
 
 	if (judgeTime <= 0.2 && judgeTime >= -0.2f) {
 		Perfect(rane);
 		Score::AddScore(1);
 		SetJusticeImage(0, rane);
-		return 1;
+		return;
 	}
 	else if (judgeTime <= 0.4 && judgeTime >= -0.4) {
 		Attack(rane);
 		Score::AddScore(2);
 		SetJusticeImage(1, rane);
-		return 2;
+		return;
 	}
 	else {
-		return 0;
+		return;
 	}
 }
 
@@ -447,6 +465,11 @@ void Notes::DataSave() {
 }
 
 bool Notes::Save() {
+//	m_Notes.sort();
+	std::sort(m_Notes.begin(), m_Notes.end(), [](Note*& note,Note*& note2)
+	{
+		return note->time < note2->time;
+	});
 	FILE* fp;
 	if ((fp = fopen(musicScore[ID], "w")) != NULL) {
 		for (auto it = m_Notes.begin(); it != m_Notes.end(); ++it) {

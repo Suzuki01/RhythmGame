@@ -57,17 +57,10 @@ void ImguiSetup::Draw() {
 
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);
-	ImGui::Text("Current Time  = %f", Sound::GetTime());
-	ImGui::Text("Current Beats = %f", Sound::GetCurrentBeats());
-	ImGui::Text("Current Sampling Number = %d", Sound::GetSamplingNumber());
-	ImGui::Text("Sound Size = %d", Sound::GetSongSize());
-	ImGui::Text("Score = %f",Score::GetScore());
-	ImGui::Checkbox("Transition Test Scene",&m_isChange);
-
-	ImGui::SameLine();
-	ImGui::SliderFloat("Start Beats",&m_beats,0,Sound::GetSongSize());
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
+	ImGui::Text("Score = %f", Score::GetScore());
+	ImGui::Checkbox("Transition Test Scene", &m_isChange);
+	Sound::ImguiSoudData();
 	ImGui::BeginChild("Scrolling");
 //	for(int n = 0; n < Notes::)
 	ImGui::EndChild();

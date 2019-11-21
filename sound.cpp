@@ -1,5 +1,9 @@
 #include "main.h"
 #include "sound.h"
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
 
 LPBYTE       Sound::m_lpWaveData = NULL;
 HWAVEOUT     Sound::m_hwo = NULL;
@@ -22,9 +26,9 @@ typedef struct {
 }SongData;
 
 SongData data[] = {
-	//	{{"asset/sound/kurumiwari_ningyou.wav"},144 },
-		{{"asset/sound/aisi.wav"},100 },
+		{{"asset/sound/kurumiwari_ningyou.wav"},144 },
 		{{"asset/sound/tengokuto_jigoku.wav"},83},
+		{{"asset/sound/aisi.wav"},100 },
 };
 
 
@@ -38,7 +42,7 @@ BOOL Sound::Init(int id) {
 		MessageBox(NULL, TEXT("WAVEデバイスのオープンに失敗しました。"), NULL, MB_ICONWARNING);
 		return -1;
 	}
-	//waveOutSetVolume(m_hwo,900);
+	waveOutSetVolume(m_hwo,25000);
 	m_wh.lpData = (LPSTR)m_lpWaveData;
 	m_wh.dwBufferLength = dwDataSize;
 	m_wh.dwFlags = WHDR_BEGINLOOP | WHDR_ENDLOOP;
@@ -48,6 +52,7 @@ BOOL Sound::Init(int id) {
 	m_playLength = m_wh.dwBufferLength / m_wf.nBlockAlign;
 	m_Wosp.nBlockAlign = Sound::m_wf.nBlockAlign;
 	m_Wosp.nAvgBytesPerSec = Sound::m_wf.nAvgBytesPerSec;
+	m_LastSamples = 0;
 //	Start();
 }
 
@@ -64,7 +69,6 @@ void Sound::UnInit() {
 }
 
 void Sound::Update() {
-
 	m_mmt.wType = TIME_SAMPLES;
 	waveOutGetPosition(m_hwo, &m_mmt, sizeof(MMTIME)); //
 	m_dwSecond = (float)m_mmt.u.cb / (float)m_wf.nSamplesPerSec; //cb今流してるサンプリングデータの番号　wf.nSam 一秒間に何サンプリング
@@ -161,7 +165,7 @@ float Sound::GetCurrentBeats() {
 }
 
 float Sound::GetEditorCurrenntBeats() {
-	return ((float)m_mmt.u.cb + (float)m_Samples) / ((float)m_wf.nSamplesPerSec * 60.0f / (float)m_bpm);
+	return (float)m_mmt.u.cb / ((float)m_wf.nSamplesPerSec * 60.0f / (float)m_bpm);
 }
 
 void Sound::Reset() {
@@ -193,7 +197,6 @@ void Sound::SetPosition(DWORD samples) {
 	}*/
 	Sound::WaveOutSetPosition(Sound::m_hwo, &Sound::m_wh, &Sound::m_mmt, &m_Wosp);
 	m_LastSamples = m_Samples;
-	Stop();
 }
 
 int Sound::GetBpm() {
@@ -237,6 +240,8 @@ int Sound::WaveOutSetPosition(HWAVEOUT hwo, LPWAVEHDR pwh, LPMMTIME pmmt, WOSP* 
 
 	waveOutPrepareHeader(hwo, &m_whdr, sizeof(WAVEHDR));
 	waveOutWrite(hwo, &m_whdr, sizeof(WAVEHDR));
+	Stop();
+	
 	return 0;
 }
 
@@ -245,4 +250,19 @@ void Sound::SetPositionUnprepareHeader(HWAVEOUT hwo)
 	if (m_whdr.dwFlags & WHDR_PREPARED) {
 		waveOutUnprepareHeader(hwo, &m_whdr, sizeof(WAVEHDR));
 	}
+}
+void Sound::ImguiSoudData() {
+	ImGui::Text("Current Time  = %f", Sound::GetTime());
+	if(isPlay)
+		ImGui::Text("Current Beats = %f", Sound::GetCurrentBeats());
+	else {
+		ImGui::Text("Current Beats = %f", Sound::GetEditorCurrenntBeats());
+	}
+
+	ImGui::Text("EditorBeats = %f", Sound::GetEditorCurrenntBeats());
+	ImGui::Text("Beats = %f", Sound::GetCurrentBeats());
+
+	ImGui::Text("Current Sampling Number = %d", Sound::GetSamplingNumber());
+	ImGui::Text("Sound Size = %d", Sound::GetSongSize());
+
 }

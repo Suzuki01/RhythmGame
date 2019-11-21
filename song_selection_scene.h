@@ -1,16 +1,6 @@
 #ifndef SONG_SELECTION_SCENE_H_
 #define SONG_SELECTION_SCENE_H_
 
-#include "main.h"
-#include "manager.h"
-#include "input.h"
-#include "polygon.h"
-#include "scene.h"
-#include "audio_clip.h"
-#include "game_scene.h"
-#include "thumbnail.h"
-#include "sound.h"
-#include "notes.h"
 
 
 

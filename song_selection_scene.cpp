@@ -1,3 +1,14 @@
+#include "main.h"
+#include "manager.h"
+#include "input.h"
+#include "polygon.h"
+#include "scene.h"
+#include "audio_clip.h"
+#include "game_scene.h"
+#include "thumbnail.h"
+#include "sound.h"
+#include "notes.h"
+#include "editor_scene.h"
 #include "song_selection_scene.h"
 
 char* number[] = {
@@ -47,7 +58,12 @@ void SongSelectionScene::Init()
 		}
 		m_pThumbnailPolygon.push_back(thumPoly);
 	}
-	m_Phase = PHASE_INDEX_START;
+	if (Notes::isEditorMode) {
+		m_Phase = PHASE_INDEX_SELECT;
+	}
+	else {
+		m_Phase = PHASE_INDEX_START;
+	}
 	g_polygon = new CPolygon;
 	g_polygon->Init("asset/tutorial.png",0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
 }
@@ -134,8 +150,12 @@ void SongSelectionScene::Update()
 	case PHASE_INDEX_DECISION:
 		if (Input::Keyboard_IsTrigger(VK_SPACE)) {
 			//UnInit();
-
-			CManager::SetScene<GameScene>();
+			if (Notes::isEditorMode) {
+				CManager::SetScene<EditorScene>();
+			}
+			else {
+				CManager::SetScene<GameScene>();
+			}
 		}
 		break;
 	}

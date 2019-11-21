@@ -67,7 +67,6 @@ void BillBoard::Draw() {
 	CRenderer::SetTexture(m_Texture);
 	// 頂点バッファ設定
 	CRenderer::SetVertexBuffers(m_VertexBuffer);
-
 	m_Transform.SetBillBoardWorldMatrix();
 	CRenderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP); //トポロジー設定（頂点をどうやって結ぶか）
 	CRenderer::GetDeviceContext()->Draw(4, 0);//ポリゴン描画
