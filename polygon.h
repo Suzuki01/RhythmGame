@@ -1,4 +1,5 @@
-#pragma once
+#ifndef POLYGON_H_
+#define POLYGON_H_
 
 class CPolygon : public GameObject {
 private:
@@ -11,3 +12,5 @@ public:
 	void Draw();
 	void Draw(char* fileName);
 };
+
+#endif // !POLYGON_H_

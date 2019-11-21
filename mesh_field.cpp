@@ -32,99 +32,6 @@ void MeshField::Init(float width, float height, int Max, int sideMax, int length
 	WORD* g_pMeshFieldVertexIndex = new WORD[indexNum];
 	float posX = 0, posZ = 0;
 	int num = 0;
-/*	for (int z = 0; z < lengthMax + 1; z++) {
-		posX = 0;
-		for (int x = 0; x < sideMax + 1; x++) {
-			pMeshFieldVertex[z * sideMax + x].position = XMFLOAT3( x - sideMax / 2,-0.8f,-z + lengthMax / 2);
-			pMeshFieldVertex[z * sideMax + x].normal =   XMFLOAT3( 0,1.0f,0 );
-			pMeshFieldVertex[z * sideMax + x].color = XMFLOAT4(1.0f,1.0f,1.0f,1.0f);
-			pMeshFieldVertex[z * sideMax + x].texcoord = XMFLOAT2(x, z);
-			num++;
-		}
-	}
-
-//	num = 0;
-	XMFLOAT3 va, vb;
-	for (int z = 1; z < lengthMax - 1; z++) {
-		float startX = -(width * sideMax / 2);
-		float startZ = (height * lengthMax / 2);
-		posX = 0;
-		for (int x = 1; x < sideMax - 1; x++) {
-			va.x = pMeshFieldVertex[(z - 1) * sideMax + x].position.x - pMeshFieldVertex[(z + 1) * sideMax + x].position.x;
-			va.y = pMeshFieldVertex[(z - 1) * sideMax + x].position.y - pMeshFieldVertex[(z + 1) * sideMax + x].position.y;
-			va.z = pMeshFieldVertex[(z - 1) * sideMax + x].position.z - pMeshFieldVertex[(z + 1) * sideMax + x].position.z;
-
-			vb.x = pMeshFieldVertex[z * sideMax + (x + 1)].position.x - pMeshFieldVertex[(z - 1) * sideMax + (x - 1)].position.x;
-			vb.y = pMeshFieldVertex[z * sideMax + (x + 1)].position.y - pMeshFieldVertex[(z - 1) * sideMax + (x - 1)].position.y;
-			vb.z = pMeshFieldVertex[z * sideMax + (x + 1)].position.z - pMeshFieldVertex[(z - 1) * sideMax + (x - 1)].position.z;
-			
-			//外積の計算
-			XMFLOAT3 n = { va.y * vb.z - va.z * vb.y,va.z * vb.x - va.x * vb.z,va.x * vb.y - va.y * vb.x };
-			float length = sqrtf(n.x * n.x + n.y * n.y + n.z * n.z); //三平方の定理を使う
-			
-			n.x = n.x / length;
-			n.y = n.y / length;
-			n.z = n.z / length; //正規化（ノーマライズ）　長さ1に
-			pMeshFieldVertex[z * sideMax + x].normal = n;
-		}
-	}
-
-	// 頂点バッファ生成
-	{
-		D3D11_BUFFER_DESC bd;
-		ZeroMemory(&bd, sizeof(bd));
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(MeshFieldVertex) * sideMax * lengthMax;
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-
-		D3D11_SUBRESOURCE_DATA sd;
-		ZeroMemory(&sd, sizeof(sd));
-		sd.pSysMem = pMeshFieldVertex;
-
-		CRenderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
-	}
-
-//	unsigned  index[(sideMax * 2 + 2) * (lengthMax - 1) - 2];
-//	WORD* g_pMeshFieldVertexIndex = new WORD[indexNum];
-	unsigned short* g_pMeshFieldVertexIndex = new unsigned short[indexNum];
-	int VertexNum = 0;
-
-	for (int z = 0; z < lengthMax; z++) {
-		for (int x = 0; x < (sideMax + 1); x++) {
-			g_pMeshFieldVertexIndex[VertexNum] = (z + 1) * sideMax + x;
-			VertexNum++;
-			g_pMeshFieldVertexIndex[VertexNum] = z * sideMax + x;
-			VertexNum++;
-		}
-		if (z != lengthMax - 2)
-			break;
-
-		g_pMeshFieldVertexIndex[VertexNum] = z * sideMax + sideMax - 1;
-		VertexNum++;
-		g_pMeshFieldVertexIndex[VertexNum] = (z + 2) * sideMax;
-		VertexNum++;
-	}
-
-	// インデックスバッファ生成
-	{
-		D3D11_BUFFER_DESC bd;
-		ZeroMemory(&bd, sizeof(bd));
-		bd.Usage = D3D11_USAGE_DEFAULT;
-		bd.ByteWidth = sizeof(unsigned short) * indexNum;
-		bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		bd.CPUAccessFlags = 0;
-
-		D3D11_SUBRESOURCE_DATA sd;
-		ZeroMemory(&sd, sizeof(sd));
-		sd.pSysMem = g_pMeshFieldVertexIndex;
-
-		CRenderer::GetDevice()->CreateBuffer(&bd, &sd, &m_IndexBuffer);
-	}
-	m_Transform.Scale = { 1.0f,1.0f,1.0f };
-	m_width = width;
-	m_sideMax = sideMax+1;
-	*/
 
 	for (int z = 0; z < lengthMax; z++)
 	{
@@ -226,7 +133,7 @@ void MeshField::Init(float width, float height, int Max, int sideMax, int length
 
 
 
-	m_Transform.Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	m_Transform.Position = XMFLOAT3(0.0f, 0.0f, 6.2f);
 	m_Transform.Rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	m_Transform.Scale = XMFLOAT3(1.0f, 1.0f, 1.0f);
 

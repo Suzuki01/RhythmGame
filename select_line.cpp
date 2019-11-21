@@ -58,13 +58,13 @@ void SelectLine::Init(char* fileName, XMFLOAT3 startPos, float verticalSize, flo
 void SelectLine::Update()
 {
 	if (Input::Keyboard_IsPress('W')) {
-		m_Billboard->m_Transform.Position.z += 1.0f;
+		m_Billboard->m_Transform.Position.z += 0.25f;
 		if (m_Billboard->m_Transform.Position.z > 30) {
 			m_Billboard->m_Transform.Position.z = 30.0f;
 		}
 	}
 	if (Input::Keyboard_IsPress('S')) {
-		m_Billboard->m_Transform.Position.z -= 1.0f;
+		m_Billboard->m_Transform.Position.z -= 0.25f;
 		if (m_Billboard->m_Transform.Position.z < 2) {
 			m_Billboard->m_Transform.Position.z = 2.0f;
 		}

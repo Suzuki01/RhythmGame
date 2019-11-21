@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BILL_BOARD_H_
+#define BILL_BOARD_H_
 
 class BillBoard : public GameObject {
 private:
@@ -14,3 +15,5 @@ public:
 	BillBoard();
 	virtual ~BillBoard();
 };
+
+#endif // !BILL_BOARD_H_

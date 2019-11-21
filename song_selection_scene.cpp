@@ -166,6 +166,7 @@ void SongSelectionScene::Draw()
 	switch (m_Phase) {
 	case PHASE_INDEX_START:
 		g_polygon->Draw();
+		break;
 	case PHASE_INDEX_SELECT:
 		for (CPolygon* object : m_pPolygon) {
 			object->Draw();

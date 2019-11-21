@@ -1,4 +1,5 @@
-#pragma once
+#ifndef INPUT_H_
+#define INPUT_H_
 
 #include "model.h"
 #include "camera.h"
@@ -16,3 +17,4 @@ public:
 	static void Init();
 	static void Update();
 };
+#endif

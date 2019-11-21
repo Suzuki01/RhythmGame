@@ -42,7 +42,7 @@ private:
 	static Note m_Notes1;
 	static int m_playingNoteNumber;
 	static int m_createLeadNoteNumber[];
-	static std::list<Note*> m_Notes;
+	static std::vector<Note*> m_Notes;
 	static JudgmentImage judgementImage[JUDGMENT_IMAGE_MAX];
 	static void Judgement(int rane);
 	static void Perfect(int rane);
@@ -76,9 +76,10 @@ public:
 	static bool EndCheck();
 	static bool Save();
 	static bool CheckNotes(XMFLOAT3 pos,float range,int rane);
-	bool operator()(Note& n,float posZ, float range) {
+	static void DrawCurrentPosition();
+/*	bool operator()(Note& n,float posZ, float range) {
 		return n.m_pModel->Position.z < posZ + range || n.m_pModel->Position.z > posZ - range;
-	}
+	}*/
 };
 
 #endif // !NOTES_H_

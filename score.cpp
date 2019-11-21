@@ -10,6 +10,8 @@ CPolygon* Score::m_pAttackPoly[4];
 CPolygon* Score::m_pMissPoly[4];
 CModel* Score::m_pPercentage;
 Classification Score::items;
+BillBoard* Score::m_pBillboardStart;
+BillBoard* Score::m_pBillboardEnd;
 
 char* numberImage[] = {
 	{"asset/number/0.png"},
@@ -64,13 +66,19 @@ void Score::Init(int digit)
 	for (int i = 0; i < 4; i++) {
 		m_pComboPoly[i] = new CPolygon;
 		m_pComboPoly[i]->Init(numberImage[0], 0, 0, 30, 30);
-		m_pComboPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 375.0f, 0.0f };
+		m_pComboPoly[i]->m_Transform.Position = { 180.0f - i * 30.0f, 375.0f, 0.0f };
 		m_pComboPoly[i]->m_Transform.Scale = { 1.0f,1.0f,1.0f };
 	}
 
 	m_pPercentage = new CModel;
 	m_pPercentage->Load("asset/miku_01.obj");
 
+	m_pBillboardEnd = new BillBoard;
+	m_pBillboardEnd->Init("asset/position_start.png");
+	m_pBillboardEnd->m_Transform.Position = { 14.0f,8.0f,8.0f };
+	m_pBillboardStart = new BillBoard;
+	m_pBillboardStart->Init("asset/end.png");
+	m_pBillboardStart->m_Transform.Position = { 18.0f,-8.0f,8.0f };
 }
 
 void Score::UnInit()
@@ -90,6 +98,7 @@ void Score::Update()
 
 void Score::Draw()
 {
+	SongPositionDraw();
 	int sce = items.combo;
 	for (int i = 0; i < 4; i++) {
 		if (i > 0 && sce == 0)
@@ -176,10 +185,14 @@ void Score::SetPosition(XMFLOAT3 position) {
 
 void Score::SongPositionDraw()
 {
+	//start地点とgoal地点の描画
+	m_pBillboardStart->Draw();
+	m_pBillboardEnd->Draw();
+
 	float per = 0;
 		if(Sound::GetSamplingNumber() != 0)
 			per = (float)Sound::GetSamplingNumber() / Sound::GetSongSize();
-	m_pPercentage->Position = { -4 + (20 * per),0,0 };
+	m_pPercentage->Position = { 17.5f,8.0f - (13.5f * per),12.0f - (6.2f * per) };
 	XMMATRIX world;
 	world = XMMatrixTranslation(m_pPercentage->Position.x, m_pPercentage->Position.y, m_pPercentage->Position.z);
 	CRenderer::SetWorldMatrix(&world);

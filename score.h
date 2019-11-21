@@ -6,6 +6,7 @@
 #include "input.h"
 #include "polygon.h"
 #include "sound.h"
+#include "bill_board.h"
 
 #define DIGIT_MAX (7)
 
@@ -29,6 +30,8 @@ private:
 	static CModel* m_pPercentage;
 	static int digit;
 	static Classification items;
+	static BillBoard* m_pBillboardStart;
+	static BillBoard* m_pBillboardEnd;
 public:
 	static void Init(int digit);
 	static void UnInit();

@@ -1,3 +1,24 @@
+#include "main.h"
+#include "renderer.h"
+#include "game_object.h"
+#include "field.h"
+#include "mesh_field.h"
+#include "input.h"
+#include "camera.h"
+#include "player.h"
+#include "notes.h"
+#include "polygon.h"
+#include "bill_board.h"
+#include "sound.h"
+#include "audio_clip.h"
+#include "sound_manager.h"
+#include "scene.h"
+#include "result_scene.h"
+#include "manager.h"
+#include "notes.h"
+#include "thumbnail.h"
+#include "mesh_sky.h"
+#include "score.h"
 #include "game_scene.h"
 
 
@@ -81,7 +102,6 @@ void GameScene::Draw() {
 	Notes::Draw();
 	Score::Draw();
 	Thumbnail::Draw();
-
 	switch (m_Phase) {
 	case PHASE_INDEX_READY:
 		ready->Draw();

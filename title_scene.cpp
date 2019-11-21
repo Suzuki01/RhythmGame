@@ -5,13 +5,14 @@
 #include "input.h"
 #include "polygon.h"
 #include "scene.h"
-#include "game_scene.h"
 #include "audio_clip.h"
+#include "notes.h"
 #include "sound_manager.h"
-#include "title_scene.h"
 #include "song_selection_scene.h"
+#include "game_scene.h"
 #include "test_scene.h"
 #include "editor_scene.h"
+#include "title_scene.h"
 
 void TitleScene::Init()
 {
@@ -31,8 +32,8 @@ void TitleScene::Update()
 	Scene::Update();
 
 	if (Input::Keyboard_IsTrigger(VK_SPACE)) {
-		CManager::SetScene<SongSelectionScene>();
 		Notes::isEditorMode = false;
+		CManager::SetScene<SongSelectionScene>();
 	}
 	if (Input::Keyboard_IsTrigger(VK_RETURN)) {
 		CManager::SetScene<TestScene>();

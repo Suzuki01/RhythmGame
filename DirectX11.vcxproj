@@ -182,7 +182,6 @@
     <ClCompile Include="model.cpp" />
     <ClCompile Include="model_animation.cpp" />
     <ClCompile Include="notes.cpp" />
-    <ClCompile Include="notes_object.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="polygon.cpp" />
     <ClCompile Include="quaternion.cpp" />
@@ -237,7 +236,6 @@
     <ClInclude Include="model.h" />
     <ClInclude Include="model_animation.h" />
     <ClInclude Include="notes.h" />
-    <ClInclude Include="notes_object.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="polygon.h" />
     <ClInclude Include="quaternion.h" />
