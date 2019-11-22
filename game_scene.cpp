@@ -26,9 +26,9 @@ void GameScene::Init() {
 	AddGameObject<CCamera>(CameraLayer)->Init();
 //	AddGameObject<Player>(PlayerLayer)->Init();
 	AddGameObject<MeshField>(FieldLayer)->Init(4, 16, 100, 5, 20);
-/*	AddGameObject<Field>(JusticeFieldLayer)->Init();
-	AddGameObject<MeshSky>(SkyDomeLayer)->Init(1.5,42,40,40);
-*/
+	AddGameObject<Field>(JusticeFieldLayer)->Init();
+//	AddGameObject<MeshSky>(SkyDomeLayer)->Init(1.5,42,40,40);
+
 	Notes::Init();
 	Score::Init(5);
 	count = 0;

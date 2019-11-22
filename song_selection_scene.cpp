@@ -38,8 +38,8 @@ CPolygon* g_polygon = new CPolygon;
 
 void SongSelectionScene::Init()
 {
-	AddGameObject<CPolygon>(0)->Init("asset/press_to_space.png", 280, 400, 397, 84);
-	AddGameObject<CPolygon>(0)->Init("asset/select.png", 300, 50, 350, 84);
+	AddGameObject<CPolygon>(0)->Init("asset/press_to_space.png", 345, 500, 397, 84);
+	AddGameObject<CPolygon>(0)->Init("asset/select.png", 370, 50, 350, 84);
 	on = 0;
 	//‹È”‚ğæ“¾iŒ»“_‚Å‚Í’¼‘Å‚¿j
 	for (int i = 0; i < 2; i++) {
@@ -177,6 +177,7 @@ void SongSelectionScene::Draw()
 		Scene::Draw();	
 		break;
 	case PHASE_INDEX_DECISION:
+		Scene::Draw();
 		for (CPolygon* object : m_pSelectSongFrame) {
 			object->Draw();
 		}

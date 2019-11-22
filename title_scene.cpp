@@ -17,8 +17,8 @@
 void TitleScene::Init()
 {
 	AddGameObject<CPolygon>(0)->Init("asset/background.png",0,0,SCREEN_WIDTH,SCREEN_HEIGHT);
-	AddGameObject<CPolygon>(0)->Init("asset/title.png",280,100,397,84);
-	AddGameObject<CPolygon>(0)->Init("asset/press_to_space.png",280,400,397,84);
+	AddGameObject<CPolygon>(0)->Init("asset/title.png",330,100,397,84);
+	AddGameObject<CPolygon>(0)->Init("asset/press_to_space.png",330,450,397,84);
 	//m_SE = new CAudioClip;
 }
 

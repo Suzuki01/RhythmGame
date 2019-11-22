@@ -8,6 +8,7 @@ public :
 	static void Draw();
 	static void UnInit();
 	static float GetStartBeats();
+	static bool m_isNoteCreate;
 private:
 	static bool m_isChange;
 	static float m_beats;

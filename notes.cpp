@@ -70,19 +70,19 @@ void Notes::Load(int id) {
 			switch (note->rane)
 			{
 			case 1:
-				note->m_pModel->Position = { -6.0f, 0.0f,8.0f * note->time };
+				note->m_pModel->Position = { -6.0f, 0.0f,12.0f * note->time };
 				m_Notes.push_back(note);
 				break;
 			case 2:
-				note->m_pModel->Position = { -2.0f, 0.0f,8.0f * note->time };
+				note->m_pModel->Position = { -2.0f, 0.0f,12.0f * note->time };
 				m_Notes.push_back(note);
 				break;
 			case 3:
-				note->m_pModel->Position = { 2.0f, 0.0f,8.0f * note->time };
+				note->m_pModel->Position = { 2.0f, 0.0f,12.0f * note->time };
 				m_Notes.push_back(note);
 				break;
 			case 4:
-				note->m_pModel->Position = { 6.0f, 0.0f,8.0f * note->time };
+				note->m_pModel->Position = { 6.0f, 0.0f,12.0f * note->time };
 				m_Notes.push_back(note);
 				break;
 			default:
@@ -179,9 +179,9 @@ void Notes::Update() {
 			break;
 		else if ((*it)->isCreate) {
 			if (Sound::isPlay)
-				(*it)->m_pModel->Position.z = 8.0f * (*it)->time - 8.0f * Sound::GetCurrentBeats();
+				(*it)->m_pModel->Position.z = 12.0f * (*it)->time - 12.0f * Sound::GetCurrentBeats();
 			else {
-				(*it)->m_pModel->Position.z = 8.0f * (*it)->time - 8.0f * Sound::GetEditorCurrenntBeats();
+				(*it)->m_pModel->Position.z = 12.0f * (*it)->time - 12.0f * Sound::GetEditorCurrenntBeats();
 			}
 		
 			(*it)->m_pModel->Update();
@@ -218,17 +218,8 @@ void Notes::Create(int rane, float beatOffset) {
 	m_Notes.push_back(note);
 }
 
-void Notes::Destory() {
-
-}
-
 float Notes::GetCurrentNotesTime(int rane) {
 	return m_CurrentNoteData->time;
-}
-
-float Notes::GetFirstNotesTime()
-{
-	return 0;
 }
 
 bool Notes::EndCheck()
@@ -286,6 +277,7 @@ void Notes::Miss(int rane)
 {
 	if (isEditorMode)
 		return;
+	SetJusticeImage(2, rane);
 	Score::AddScore(3);
 	Next();
 }
@@ -294,7 +286,7 @@ void Notes::SetJusticeImage(int index, int rane) {
 	for (int i = 0; i < JUDGMENT_IMAGE_MAX; i++) {
 		if (!judgementImage[i].isDisplay) {
 			judgementImage[i].billBoard->SetTexture(classImage[index]);
-			judgementImage[i].billBoard->m_Transform.Position = { -6.0f + (rane - 1) * 4, 0.0f,0.0f };
+			judgementImage[i].billBoard->m_Transform.Position = { -8.0f + (rane - 1) * 4, 0.0f,0.0f };
 			judgementImage[i].isDisplay = true;
 			break;
 		}

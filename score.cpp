@@ -1,7 +1,10 @@
 #include "score.h"
 
+#define MAX_SCORE (1010000)
+
 int Score::score;
 int Score::digit;
+int Score::oneNoteScore;
 CPolygon* Score::m_pPolygon[DIGIT_MAX];
 CPolygon* Score::m_pComboPoly[4];
 CPolygon* Score::m_pMaxComboPoly[4];
@@ -12,7 +15,6 @@ CModel* Score::m_pPercentage;
 Classification Score::items;
 BillBoard* Score::m_pBillboardStart;
 BillBoard* Score::m_pBillboardEnd;
-
 char* numberImage[] = {
 	{"asset/number/0.png"},
 	{"asset/number/1.png"},
@@ -33,33 +35,33 @@ void Score::Init(int digit)
 	for (int i = 0; i < DIGIT_MAX; i++) {
 		m_pPolygon[i] = new CPolygon;
 		m_pPolygon[i]->Init(numberImage[0], 0, 0, 50, 50);
-		m_pPolygon[i]->m_Transform.Position = { 620.0f - i * 50.0f,155.0f, 0.0f };
+		m_pPolygon[i]->m_Transform.Position = { 620.0f - i * 50.0f,255.0f, 0.0f };
 		m_pPolygon[i]->m_Transform.Scale = { 1.0f,1.0f,1.0f };
 	}
 	for (int i = 0; i < 4; i++) {
 		m_pPerfectPoly[i] = new CPolygon;
 		m_pPerfectPoly[i]->Init(numberImage[0], 0, 0, 30, 30);
-		m_pPerfectPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 210.0f, 0.0f };
+		m_pPerfectPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 310.0f, 0.0f };
 		m_pPerfectPoly[i]->m_Transform.Scale = { 1.0f,1.0f,1.0f };
 	}	
 
 	for (int i = 0; i < 4; i++) {
 		m_pAttackPoly[i] = new CPolygon;
 		m_pAttackPoly[i]->Init(numberImage[0], 0, 0, 30, 30);
-		m_pAttackPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 265.0f, 0.0f };
+		m_pAttackPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 365.0f, 0.0f };
 		m_pAttackPoly[i]->m_Transform.Scale = { 1.0f,1.0f,1.0f };
 	}	
 	for (int i = 0; i < 4; i++) {
 		m_pMissPoly[i] = new CPolygon;
 		m_pMissPoly[i]->Init(numberImage[0], 0, 0, 30, 30);
-		m_pMissPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 315.0f, 0.0f };
+		m_pMissPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 415.0f, 0.0f };
 		m_pMissPoly[i]->m_Transform.Scale = { 1.0f,1.0f,1.0f };
 	}
 
 	for (int i = 0; i < 4; i++) {
 		m_pMaxComboPoly[i] = new CPolygon;
 		m_pMaxComboPoly[i]->Init(numberImage[0], 0, 0, 30, 30);
-		m_pMaxComboPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 365.0f, 0.0f };
+		m_pMaxComboPoly[i]->m_Transform.Position = { 380.0f - i * 30.0f, 465.0f, 0.0f };
 		m_pMaxComboPoly[i]->m_Transform.Scale = { 1.0f,1.0f,1.0f };
 	}
 
@@ -79,6 +81,7 @@ void Score::Init(int digit)
 	m_pBillboardStart = new BillBoard;
 	m_pBillboardStart->Init("asset/end.png");
 	m_pBillboardStart->m_Transform.Position = { 18.0f,-8.0f,8.0f };
+	oneNoteScore = MAX_SCORE / Notes::GetMaxNotes();
 }
 
 void Score::UnInit()
@@ -154,7 +157,7 @@ void Score::AddScore(int judge) {
 	{
 	//パーフェクト
 	case 1:
-		score += 100;
+		score += oneNoteScore;
 		items.perfect++;
 		items.combo++;
 		if (items.combo >= items.maxCombo)
@@ -162,7 +165,7 @@ void Score::AddScore(int judge) {
 		break;
 	//アタック
 	case 2:
-		score += 1;
+		score += oneNoteScore / 4;
 		items.attack++;
 		items.combo++;
 		if (items.combo >= items.maxCombo)
@@ -190,8 +193,14 @@ void Score::SongPositionDraw()
 	m_pBillboardEnd->Draw();
 
 	float per = 0;
-		if(Sound::GetSamplingNumber() != 0)
+	if (Sound::GetSamplingNumber() != 0) {
+		if (Sound::isPlay) {
 			per = (float)Sound::GetSamplingNumber() / Sound::GetSongSize();
+		}
+		else {
+			per = (float)Sound::GetEditorSamplingNumber() / Sound::GetSongSize();
+		}
+	}
 	m_pPercentage->Position = { 17.5f,8.0f - (13.5f * per),12.0f - (6.2f * per) };
 	XMMATRIX world;
 	world = XMMatrixTranslation(m_pPercentage->Position.x, m_pPercentage->Position.y, m_pPercentage->Position.z);

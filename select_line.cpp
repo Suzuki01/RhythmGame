@@ -49,7 +49,7 @@ void SelectLine::Init(char* fileName, XMFLOAT3 startPos, float verticalSize, flo
 //	m_Transform.Position.x = 10;
 
 	m_Billboard = new BillBoard();
-	m_Billboard->Init("asset/jo.png");
+	m_Billboard->Init("asset/down_allow.png");
 	m_Billboard->m_Transform.Position.z = 4;
 	m_Billboard->m_Transform.Position = startPos;
 //	m_Billboard->m_Transform.Scale = XMFLOAT3(verticalSize,0.0f,horizontalSize);

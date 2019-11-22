@@ -154,6 +154,10 @@ int Sound::GetSamplingNumber() {
 	return (int)m_mmt.u.cb + m_Samples;
 }
 
+int Sound::GetEditorSamplingNumber() {
+	return (int)m_mmt.u.cb;
+}
+
 //1秒間のサンプリング数取得
 DWORD Sound::GetCurrentSamplingPerSec() {
 	return m_wf.nSamplesPerSec;
@@ -173,28 +177,16 @@ void Sound::Reset() {
 	waveOutReset(m_hwo);
 }
 
+//曲の長さの取得（サンプリング数）
 int Sound::GetSongSize() {
 	return m_playLength;
 }
 
-void Sound::SetTime() {
-	m_mmt.u.cb = (DWORD)20000;
-	m_wh.dwBytesRecorded = 20;
-	waveOutWrite(m_hwo, &m_wh, sizeof(WAVEHDR));
-}
-
-
 void Sound::SetPosition(DWORD samples) {
 	if (isPlay)
 		return;
-//	Sound::m_mmt.wType = TIME_MS;
     m_Samples += samples - m_LastSamples;
 	Sound::m_mmt.u.cb = m_Samples;
-/*	if(samples > m_LastSamples)
-		Sound::m_mmt.u.cb += samples;
-	else {
-		Sound::m_mmt.u.cb -= samples;
-	}*/
 	Sound::WaveOutSetPosition(Sound::m_hwo, &Sound::m_wh, &Sound::m_mmt, &m_Wosp);
 	m_LastSamples = m_Samples;
 }

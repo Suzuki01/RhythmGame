@@ -6,6 +6,7 @@
 #include "input.h"
 #include "polygon.h"
 #include "sound.h"
+#include "notes.h"
 #include "bill_board.h"
 
 #define DIGIT_MAX (7)
@@ -32,6 +33,7 @@ private:
 	static Classification items;
 	static BillBoard* m_pBillboardStart;
 	static BillBoard* m_pBillboardEnd;
+	static int oneNoteScore;
 public:
 	static void Init(int digit);
 	static void UnInit();

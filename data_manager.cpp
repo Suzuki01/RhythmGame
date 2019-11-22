@@ -3,6 +3,8 @@
 #include <fstream>
 #include "data_manager.h"
 
+
+//
 struct VECTOR3 {
 	float x, y, z;
 	template<class Archive>

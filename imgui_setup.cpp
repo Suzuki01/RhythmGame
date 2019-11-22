@@ -15,7 +15,7 @@
 
 bool ImguiSetup::m_isChange = false;
 float ImguiSetup::m_beats = 0;
-
+bool ImguiSetup::m_isNoteCreate = false;
 void ImguiSetup::Init() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -60,6 +60,7 @@ void ImguiSetup::Draw() {
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::Text("Score = %f", Score::GetScore());
 	ImGui::Checkbox("Transition Test Scene", &m_isChange);
+	ImGui::Checkbox("Editor Note Create Push Button", &m_isNoteCreate);
 	Sound::ImguiSoudData();
 	ImGui::BeginChild("Scrolling");
 //	for(int n = 0; n < Notes::)
