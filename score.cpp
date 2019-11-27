@@ -81,7 +81,9 @@ void Score::Init(int digit)
 	m_pBillboardStart = new BillBoard;
 	m_pBillboardStart->Init("asset/end.png");
 	m_pBillboardStart->m_Transform.Position = { 18.0f,-8.0f,8.0f };
-	oneNoteScore = MAX_SCORE / Notes::GetMaxNotes();
+
+	if(!Notes::isEditorMode)
+		oneNoteScore = MAX_SCORE / Notes::GetMaxNotes();
 }
 
 void Score::UnInit()

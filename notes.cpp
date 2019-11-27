@@ -1,6 +1,5 @@
 #include "notes.h"
 
-#define RANE_MAX	(4)	
 #define NOTE_MAX	(1000)
 
 int Notes::ID;
@@ -65,29 +64,8 @@ void Notes::Load(int id) {
 			Note* note = new Note(stof(strvec.at(i)), stof(strvec.at(i + 1)), true);
 			note->m_pModel = new CModel;
 			note->m_pModel->Load("asset/miku_01.obj");
-			//ƒm[ƒc‚Ì‰ŠúˆÊ’u‚ÌŒvŽZŽ®@”CˆÓ‚Ìƒm[ƒcƒXƒs[ƒh~0.2~ƒm[ƒc‚ð’@‚­ƒr[ƒg”
-			//model->Position = { 0.0f, 0.0f,0.2f * g_Notes[i].time};
-			switch (note->rane)
-			{
-			case 1:
-				note->m_pModel->Position = { -6.0f, 0.0f,12.0f * note->time };
-				m_Notes.push_back(note);
-				break;
-			case 2:
-				note->m_pModel->Position = { -2.0f, 0.0f,12.0f * note->time };
-				m_Notes.push_back(note);
-				break;
-			case 3:
-				note->m_pModel->Position = { 2.0f, 0.0f,12.0f * note->time };
-				m_Notes.push_back(note);
-				break;
-			case 4:
-				note->m_pModel->Position = { 6.0f, 0.0f,12.0f * note->time };
-				m_Notes.push_back(note);
-				break;
-			default:
-				break;
-			}
+			note->m_pModel->Position = { -6.0f + 4.0f * (note->rane - 1), 0.0f,12.0f * note->time };
+			m_Notes.push_back(note);
 			maxNotes++;
 		}
 	}
@@ -211,7 +189,10 @@ bool Notes::IsCreateNotes(int index)
 }
 
 void Notes::Create(int rane, float beatOffset) {
-	Note* note = new Note(((beatOffset / 4.0f) + Sound::GetEditorCurrenntBeats()), rane, true);
+	if (rane == 0)
+		return;
+	Note* note = new Note(((beatOffset / 12.0f) + Sound::GetEditorCurrenntBeats()), rane, true);
+//	Note* note = new Note(beatOffset + Sound::GetEditorCurrenntBeats(), rane, true);
 	note->m_pModel = new CModel();
 	note->m_pModel->Load("asset/miku_01.obj");
 	note->m_pModel->Position = { -6.0f + 4.0f * (rane - 1),0.0f,0.0f };

@@ -52,8 +52,12 @@ void ImguiSetup::Draw() {
 
 	ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 
-	if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+	if (ImGui::Button("Button")) {                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		Notes::Create(1,counter);
 		counter++;
+	}
+	if (ImGui::Button("ResetButton"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		counter = 0;
 
 	ImGui::SameLine();
 	ImGui::Text("counter = %d", counter);

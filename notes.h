@@ -14,6 +14,7 @@
 
 #define NOTES_MAX	(900)
 #define JUDGMENT_IMAGE_MAX	(20)
+#define RANE_MAX	(4)	
 
 struct Note{
 	CModel* m_pModel;

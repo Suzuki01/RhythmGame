@@ -16,15 +16,24 @@ private:
 	int i;
 	CAudioClip* audio;
 	void NoteCreate();
-	int JudgeRane(
-		int Sx,  // スクリーンX座標
-		int Sy,  // スクリーンY座標
-		float fZ,  // 射影空間でのZ値（0～1）
+	int JudgeRane(float startPosX,float x);
+	XMFLOAT3 CalcScreenToWorld(
+		int Sx,  // 
+		int Sy,  // 
+		float fZ,  //
 		int Screen_w,
 		int Screen_h,
 		XMMATRIX* View,
-		XMMATRIX* Prj,
-		XMMATRIX* world);
+		XMMATRIX* Prj
+	);
+	XMFLOAT3 CalcScreenToXZ(
+		int Sx,
+		int Sy,
+		int Screen_w,
+		int Screen_h,
+		XMMATRIX* View,
+		XMMATRIX* Prj
+	);
 };
 
 #endif
